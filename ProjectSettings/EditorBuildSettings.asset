@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Start_1.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Stage_1.unity
+    guid: 2b12896bb0c05a4428e4b04db487b6cd
+  - enabled: 1
+    path: Assets/Scenes/Spring_vil.unity
+    guid: bdee90c727006f34a8c6dcc999863674
+  - enabled: 1
+    path: Assets/Scenes/Stage_2.unity
+    guid: 9ff464199074ef8478d8c1e3ca114dff
+  - enabled: 1
+    path: Assets/Scenes/Summer_vil.unity
+    guid: 1cbf07ca4dd57bd48b613a3844acbb02
+  - enabled: 1
+    path: Assets/Scenes/Stage_3.unity
+    guid: ea037399c31cc704d98863497fe61a89
+  - enabled: 1
+    path: Assets/Scenes/Autumn_vil.unity
+    guid: 7125722daaa54da4a8d241f49014e5e4
+  - enabled: 1
+    path: Assets/Scenes/Stage_4.unity
+    guid: 99f3241758a1e814aa8d4ac8d0f6f8b4
+  - enabled: 1
+    path: Assets/Scenes/END_OF_TIME.unity
+    guid: 45b673453aeea7a48a8388a28079f810
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_UseUCBPForAssetBundles: 0
