@@ -2576,9 +2576,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47de96c9715706468e1c91c70968802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bossactive
-  speed: 20
+  speed: 3
   tracestart: 5
   face: 0
+  IsTracing: 0
 --- !u!95 &1014490756
 Animator:
   serializedVersion: 7
