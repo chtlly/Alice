@@ -2579,10 +2579,11 @@ MonoBehaviour:
   speed: 3
   tracestart: 2
   traceend: 1
-  skillnumber: 0
+  skillnumber: 3
   IsTracing: 0
   AttackStart: 0
   IsAttacking: 0
+  Blood_Circle: {fileID: 1879995754449708060, guid: 2df97daea600f68448466a1356195ba5, type: 3}
 --- !u!95 &1014490756
 Animator:
   serializedVersion: 7

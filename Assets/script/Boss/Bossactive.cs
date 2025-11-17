@@ -14,9 +14,12 @@ public class Bossactive : MonoBehaviour
     public int skillnumber; // 어떤 스킬을 쓸 지(테스트를 위해 외부에서도 지정 가능)
 
     //보스의 상태
+    public int hp = 100;
     public bool IsTracing = false; //추격 중
     public bool AttackStart = false; //공격 시작 신호
     public bool IsAttacking = false; //공격 중이므로 개입하지 말라는 신호
+
+    public GameObject Blood_Circle;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,7 +32,7 @@ public class Bossactive : MonoBehaviour
     //어떤 스킬을 쓸 지 선택하는 함수
     public void BossSkillSelect()
     {
-        skillnumber = Random.Range(0, 5);
+        //skillnumber = Random.Range(0, 5);
         if (skillnumber == 0)
         {
             Debug.Log("기본 공격");
@@ -47,7 +50,7 @@ public class Bossactive : MonoBehaviour
         }
         else if (skillnumber == 3)
         {
-            Debug.Log("블러드 파운틴");
+            //Debug.Log("블러드 파운틴");
             this.bossanimator.SetTrigger("BossBloodTrig");
         }
         else if (skillnumber == 4)
@@ -55,6 +58,13 @@ public class Bossactive : MonoBehaviour
             Debug.Log("핏빛 매화");
             BossSkillend();
         }
+    }
+
+    public void Blood_Fountain()
+    {
+        Debug.Log("생성 중");
+        GameObject c1 = Instantiate(Blood_Circle);
+        c1.transform.position = this.transform.position;
     }
 
     public void BossSkillend()
