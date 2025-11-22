@@ -1,16 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Blood : MonoBehaviour
+public class Basic_Attack : MonoBehaviour
 {
     Bossactive bossactive;
-    GameObject player;
+    SpriteRenderer direction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        this.bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
-        this.player = GameObject.Find("player");
+        bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
+        this.direction = GetComponent<SpriteRenderer>();
+        //보스 방향에 따라 뒤집기
+        if (bossactive.bossrenderer.flipX == false)
+        {
+            this.direction.flipX = true;
+        }
+        else
+        {
+            this.direction.flipX = false;
+        }
     }
 
     // Update is called once per frame
@@ -27,8 +35,7 @@ public class Blood : MonoBehaviour
         // 만약 들어온 오브젝트의 태그가 Player면
         if (other.CompareTag("Player"))
         {
-            bossactive.ATKBuff = true;
-            bossactive.coolATK = 10.0f;
+            Debug.Log("아야");
         }
     }
 }

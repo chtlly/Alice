@@ -1,34 +1,29 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Blood : MonoBehaviour
+public class Destiny : MonoBehaviour
 {
     Bossactive bossactive;
     GameObject player;
+    public float time;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         this.bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
         this.player = GameObject.Find("player");
+        time = 2.0f;
+        bossactive.ATKBuff = true;
+        bossactive.coolATK = 10.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (bossactive.IsAttacking == false)
+        time -= Time.deltaTime;
+        if (time <= 0)
         {
             Destroy(gameObject);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        // 만약 들어온 오브젝트의 태그가 Player면
-        if (other.CompareTag("Player"))
-        {
-            bossactive.ATKBuff = true;
-            bossactive.coolATK = 10.0f;
+            bossactive.BossSkillend();
         }
     }
 }

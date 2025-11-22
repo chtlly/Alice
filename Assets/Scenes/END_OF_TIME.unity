@@ -177,7 +177,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 912533ac136cb0640819ab23c0f6d576, type: 2}
+  - {fileID: 2100000, guid: 22912cbebbb7c9a4fbe30b22f1a9c651, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2558,7 +2558,7 @@ Transform:
   m_GameObject: {fileID: 1014490752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5389, y: -1.1776, z: 0}
+  m_LocalPosition: {x: -0.5, y: -1.1776, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2576,14 +2576,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47de96c9715706468e1c91c70968802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bossactive
+  bossrenderer: {fileID: 0}
+  bossanimator: {fileID: 0}
   speed: 3
-  tracestart: 2
+  tracestart: 3
   traceend: 1
-  skillnumber: 3
+  MaxHp: 0
+  CurrentHp: 0
+  ATK: 0
+  BasicATK: 0
+  MAXATK: 0
+  ATKBuff: 0
+  coolATK: 0
+  IsIdle: 1
+  IsTalking: 0
   IsTracing: 0
   AttackStart: 0
   IsAttacking: 0
+  Basic_Effect: {fileID: 334067493931925974, guid: d49268306030b944d8bcd9770dd626a6, type: 3}
+  Destiny_Effect: {fileID: 2422724285245050295, guid: a6ba2743dfaaa0f4b888038bb560527c, type: 3}
   Blood_Circle: {fileID: 1879995754449708060, guid: 2df97daea600f68448466a1356195ba5, type: 3}
+  Break_Effect: {fileID: 7808152103438085553, guid: 1b90b6cc09d71f749bf85d705e41b487, type: 3}
 --- !u!95 &1014490756
 Animator:
   serializedVersion: 7
@@ -2615,6 +2628,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1418440285}
+  - component: {fileID: 1418440286}
   m_Layer: 0
   m_Name: SkillHelper
   m_TagString: Untagged
@@ -2637,6 +2651,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1418440286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418440284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8b9608b881ad0d43a005b63c4a33395, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillHelper
+  skillnumber: 0
+  cool1: 0
+  cool2: 0
+  cool3: 0
+  cool4: 0
 --- !u!1 &1498819002
 GameObject:
   m_ObjectHideFlags: 0
@@ -2876,50 +2907,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1 &1756305312
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1756305314}
-  - component: {fileID: 1756305313}
-  m_Layer: 0
-  m_Name: BossHelper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1756305313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1756305312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db4fa18df3370fc41a9e9ae9301720be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossHelper
---- !u!4 &1756305314
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1756305312}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1834778849
 GameObject:
   m_ObjectHideFlags: 0
@@ -3196,5 +3183,4 @@ SceneRoots:
   - {fileID: 1961671624}
   - {fileID: 731572231}
   - {fileID: 1014490754}
-  - {fileID: 1756305314}
   - {fileID: 1418440285}
