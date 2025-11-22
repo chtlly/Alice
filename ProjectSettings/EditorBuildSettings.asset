@@ -32,6 +32,36 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/END_OF_TIME.unity
     guid: 45b673453aeea7a48a8388a28079f810
+  - enabled: 1
+    path: Assets/Scenes/game/starting point.unity
+    guid: 99037c62a57b9ea4fae343eab8f6c426
+  - enabled: 1
+    path: Assets/Scenes/game/starting_point_summer.unity
+    guid: 693d3677356ce6d499fb097d5dcc96f7
+  - enabled: 1
+    path: Assets/Scenes/game/summer.unity
+    guid: 73a3a9bde254cd746a5fa61a83ee90d4
+  - enabled: 1
+    path: Assets/Scenes/game/winter.unity
+    guid: e9fba8388661ee742973c06ae501ed40
+  - enabled: 1
+    path: Assets/Scenes/game/Spring.unity
+    guid: 5333bedbf2c2707419a223dc23c73311
+  - enabled: 1
+    path: Assets/Scenes/game/shop_modify.unity
+    guid: 09a77bca6e87a4043b3ce783f2802706
+  - enabled: 1
+    path: Assets/Scenes/game/autumn.unity
+    guid: 46bc04637a12a9c4986a47f7c8ed0239
+  - enabled: 1
+    path: Assets/Scenes/game/END.unity
+    guid: c0f69453696c1ce4e868f94bf2c18bfa
+  - enabled: 1
+    path: Assets/Scenes/game/starting_point_autumn.unity
+    guid: 870708b4337910d4db4902990b9bfbd9
+  - enabled: 1
+    path: Assets/Scenes/game/starting_point_winter.unity
+    guid: 0a702c569b2617948b2a027c9926c03a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
