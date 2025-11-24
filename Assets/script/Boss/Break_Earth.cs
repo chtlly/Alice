@@ -43,7 +43,7 @@ public class Break_Earth : MonoBehaviour
         // 만약 들어온 오브젝트의 태그가 Player면
         if (other.CompareTag("Player"))
         {
-            bossactive.CurrentHp -= 10;
+            Debug.Log("플레이어의 체력 감소"); //최대 체력의 10%만큼 감소
         }
     }
 }

@@ -26,12 +26,20 @@ public class Bossactive : MonoBehaviour
     public bool IsTracing = false; //추격 중
     public bool AttackStart = false; //공격 시작 신호
     public bool IsAttacking = false; //공격 중이므로 개입하지 말라는 신호
+    public bool IsBlood = false; //핏빛 매화 스킬 사용 중이라는 신호
 
     SkillHelper skillhelper; //스킬 쿨타임 스크립트
     public GameObject Basic_Effect; //기본 공격 이펙트
     public GameObject Break_Effect; //브레이크 어스 이펙트
     public GameObject Destiny_Effect; //운명 이펙트
     public GameObject Blood_Circle; //블러드 파운틴 이펙트
+
+
+    //핏빛 매화 스킬에 필요한 것들
+    public GameObject Blood0, Blood1, Blood2, Blood3, Blood4;
+    public float blood_cool;
+    public float blood_coolm = 0.3f;
+    public float blood_level;
 
     //기본 공격
     public void Basic_ATK()
@@ -47,7 +55,6 @@ public class Bossactive : MonoBehaviour
         {
             be.transform.position = new Vector3(this.transform.position.x + 1, this.transform.position.y, 0);
         }
-
     }
 
     //운명
@@ -170,6 +177,59 @@ public class Bossactive : MonoBehaviour
             AttackStart = false; //반복되지 않게끔 문 닫기
             IsAttacking = true;
             skillhelper.BossSkillSelect();
+        }
+        else if (IsBlood)
+        {
+            Debug.Log("핏빛 매화 사용 중");
+            blood_cool -= Time.deltaTime;
+            if (blood_cool <= 0)
+            {
+                if (blood_level == 0)
+                {
+                    GameObject b0 = Instantiate(Blood0);
+                    b0.transform.position = this.transform.position;
+                    blood_cool = blood_coolm;
+                    blood_level = 1;
+                }
+                else if (blood_level == 1)
+                {
+                    GameObject b1 = Instantiate(Blood1);
+                    float Xpos = (float)this.transform.position.x - 0.7f;
+                    b1.transform.position = new Vector3(Xpos, this.transform.position.y, 0);
+                    blood_cool = blood_coolm;
+                    blood_level = 2;
+                }
+                else if (blood_level == 2)
+                {
+                    GameObject b2 = Instantiate(Blood2);
+                    b2.transform.position = this.transform.position;
+                    blood_cool = blood_coolm;
+                    blood_level = 3;
+                }
+                else if (blood_level == 3)
+                {
+                    GameObject b3 = Instantiate(Blood3);
+                    float Xpos = (float)this.transform.position.x + 0.3f;
+                    float Ypos = (float)this.transform.position.y + 0.3f;
+                    b3.transform.position = new Vector3(Xpos, Ypos, 0);
+                    blood_cool = blood_coolm;
+                    blood_level = 4;
+                }
+                else if (blood_level == 4)
+                {
+                    GameObject b4 = Instantiate(Blood4);
+                    b4.transform.position = this.transform.position;
+                    blood_cool = 0.2f;
+                    blood_level = 5;
+                }
+                else if (blood_level == 5)
+                {
+                    Debug.Log("스킬 끝");
+                    IsBlood = false;
+                    IsAttacking = false;
+                    IsIdle = true;
+                }
+            }
         }
     }
 }

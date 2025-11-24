@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SkillHelper : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SkillHelper : MonoBehaviour
     public int skillnumber; //쓸 스킬 번호
     public float cool1m, cool2m, cool3m, cool4m; //각 스킬 쿨타임 리셋용 수치
     public float cool1, cool2, cool3, cool4; //각 스킬 쿨타임
+    public float testcool; //테스트용 쿨타임
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,15 +19,20 @@ public class SkillHelper : MonoBehaviour
         bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
         phase = 1;
         skillphase = 3;
-        cool1m = 10.0f; cool2m = 12.0f; cool3m = 10.0f; cool4m = 100.0f;
-        cool1 = cool1m; cool2 = cool2m; cool3 = cool3m; cool4 = cool4m;
+        cool1m = 15.0f; cool2m = 12.0f; cool3m = 10.0f; cool4m = 15.0f;
+        cool1 = 5.0f; cool2 = 5.0f; cool3 = 5.0f; cool4 = 5.0f; //첫 쿨타임은 게임의 재미를 위해 5초로 설정.
+
+        //테스트용
+        /*testcool = 2.0f;
+        skillnumber = 1;
+        cool1 = testcool;*/
     }
 
     // Update is called once per frame
     void Update()
     {
         //체력에 따른 페이스 변화
-        if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 30 && phase != 3)
+        /*if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 30 && phase != 3)
         {
             phase = 2;
             cool1m = 10.0f; cool2m = 9.0f; cool3m = 10.0f; cool3 = cool3m;
@@ -34,7 +41,7 @@ public class SkillHelper : MonoBehaviour
         {
             phase = 3;
             cool4m = 15.0f; cool4 = cool4m;
-        }
+        }*/
 
         //스킬 쿨타임 감소
         cool1 -= Time.deltaTime; cool2 -= Time.deltaTime; cool3 -= Time.deltaTime; cool4 -= Time.deltaTime;
@@ -55,7 +62,8 @@ public class SkillHelper : MonoBehaviour
 
     public void BossSkillSelect()
     {
-        skillnumber = Random.Range(1, 4); //테스트용
+        //skillnumber = 4;
+        skillnumber = Random.Range(1, 5); // 랜덤 테스트용
         //skillnumber = Random.Range(1, skillphase); //페이스에 따른 스킬 선택
         if (skillnumber == 1 && cool1 <= 0)
         {
@@ -79,7 +87,9 @@ public class SkillHelper : MonoBehaviour
         {
             cool4 = cool4m;
             Debug.Log("핏빛 매화");
-            bossactive.BossSkillend();
+            bossactive.blood_cool = 0.5f;
+            bossactive.blood_level = 0;
+            bossactive.IsBlood = true;
         }
         else
         {
