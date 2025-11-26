@@ -40,7 +40,7 @@ public abstract class CharacterBase : MonoBehaviour
 
     public abstract void Attack(CharacterBase target);
 
-    protected virtual void Die()
+    public virtual void Die()
     {
         CurrentState = CharacterState.Dead;
     }

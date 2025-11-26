@@ -1,16 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Blood : MonoBehaviour
+public class Blood_Blossom : MonoBehaviour
 {
     Bossactive bossactive;
-    GameObject player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         this.bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
-        this.player = GameObject.Find("player");
     }
 
     // Update is called once per frame
@@ -27,9 +24,7 @@ public class Blood : MonoBehaviour
         // 만약 들어온 오브젝트의 태그가 Player면
         if (other.CompareTag("Player"))
         {
-            bossactive.ATKBuff = true;
-            bossactive.coolATK = 10.0f;
-            Debug.Log("플레이어의 체력 감소"); //최대 체력의 15%만큼 감소
+            Debug.Log("플레이어의 체력 감소"); //최대체력의 15%감소 + 보스는 데미지입힌 만큼 회복
         }
     }
 }
