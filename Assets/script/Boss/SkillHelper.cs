@@ -1,98 +1,97 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SkillHelper : MonoBehaviour
 {
-    //스킬에 필요한 것들을 관리하는 클래스
-
     Bossactive bossactive;
-    public int phase; //보스의 체력에 따른 페이스
-    public int skillphase; //쓸 수 있는 스킬 수 + 1
-    public int skillnumber; //쓸 스킬 번호
-    public float cool1m, cool2m, cool3m, cool4m; //각 스킬 쿨타임 리셋용 수치
-    public float cool1, cool2, cool3, cool4; //각 스킬 쿨타임
-    public float testcool; //테스트용 쿨타임
+    GameObject player;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // 쿨타임 원본(max)과 현재 쿨타임
+    public float cool1m, cool2m, cool3m, cool4m;
+    public float cool1, cool2, cool3, cool4;
+
     void Start()
     {
-        bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
-        phase = 1;
-        skillphase = 3;
-        cool1m = 15.0f; cool2m = 12.0f; cool3m = 10.0f; cool4m = 15.0f;
-        cool1 = 5.0f; cool2 = 5.0f; cool3 = 5.0f; cool4 = 5.0f; //첫 쿨타임은 게임의 재미를 위해 5초로 설정.
+        GameObject bossObj = GameObject.Find("Rabbit_Ssi");
+        if (bossObj != null) bossactive = bossObj.GetComponent<Bossactive>();
+        player = GameObject.Find("Player");
 
-        //테스트용
-        /*testcool = 2.0f;
-        skillnumber = 1;
-        cool1 = testcool;*/
+        // 초기 쿨타임 설정 (이미지 기준)
+        cool1m = 15.0f; // 운명
+        cool2m = 12.0f; // 브레이크 어스
+        cool3m = 10.0f; // 블러드 파운틴
+        cool4m = 15.0f; // 핏빛 매화
+
+        // 게임 시작 시 바로 스킬 좀 쓰게 짧게 설정
+        cool1 = 5.0f; cool2 = 5.0f; cool3 = 5.0f; cool4 = 5.0f;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //체력에 따른 페이스 변화
-        /*if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 30 && phase != 3)
-        {
-            phase = 2;
-            cool1m = 10.0f; cool2m = 9.0f; cool3m = 10.0f; cool3 = cool3m;
-        }
-        else if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 10)
-        {
-            phase = 3;
-            cool4m = 15.0f; cool4 = cool4m;
-        }*/
+        if (bossactive == null || player == null) return;
 
-        //스킬 쿨타임 감소
+        float hpPercent = bossactive.CurrentHp / bossactive.MaxHp * 100f;
+
+        // [매커니즘] 보스 체력에 따른 쿨타임 감소 및 스킬 해금
+        if (hpPercent <= 30f)
+        {
+            // 체력 30% 이하: 운명(10초), 브레이크어스(9초)로 감소
+            cool1m = 10.0f;
+            cool2m = 9.0f;
+        }
+        else
+        {
+            cool1m = 15.0f;
+            cool2m = 12.0f;
+        }
+
+        // 쿨타임 감소
         cool1 -= Time.deltaTime; cool2 -= Time.deltaTime; cool3 -= Time.deltaTime; cool4 -= Time.deltaTime;
-
-        //공격 버프 지속 시간
-        if (bossactive.ATKBuff == true)
-        {
-            if (bossactive.coolATK >= 0)
-            {
-                bossactive.coolATK -= Time.deltaTime;
-            }
-            else
-            {
-                bossactive.ATKBuff = false;
-            }
-        }
     }
 
     public void BossSkillSelect()
     {
-        //skillnumber = 4;
-        skillnumber = Random.Range(1, 5); // 랜덤 테스트용
-        //skillnumber = Random.Range(1, skillphase); //페이스에 따른 스킬 선택
-        if (skillnumber == 1 && cool1 <= 0)
+        if (bossactive == null || player == null) return;
+
+        // 플레이어와의 거리 (5m 조건 확인)
+        float distance = Vector2.Distance(bossactive.transform.position, player.transform.position);
+        bool isNear = distance <= 5.0f;
+        float hpPercent = bossactive.CurrentHp / bossactive.MaxHp * 100f;
+
+        int skillnumber = Random.Range(1, 5); // 1~4 랜덤
+
+        // 1. 운명 (사거리 5m, 쿨타임 15/10)
+        if (skillnumber == 1 && cool1 <= 0 && isNear)
         {
             cool1 = cool1m;
-            Debug.Log("운명");
+            Debug.Log("운명 발동");
             bossactive.bossanimator.SetTrigger("BossDesTrig");
         }
-        else if (skillnumber == 2 && cool2 <= 0)
+        // 2. 브레이크 어스 (사거리 무제한이나 발동조건 5m 랜덤)
+        else if (skillnumber == 2 && cool2 <= 0 && isNear)
         {
             cool2 = cool2m;
-            Debug.Log("브레이크 어스");
+            Debug.Log("브레이크 어스 발동");
             bossactive.bossanimator.SetTrigger("BossBreakTrig");
         }
-        else if (skillnumber == 3 && cool3 <= 0)
+        // 3. 블러드 파운틴 (체력 30% 이하 + 거리 5m)
+        else if (skillnumber == 3 && cool3 <= 0 && isNear && hpPercent <= 30f)
         {
             cool3 = cool3m;
-            Debug.Log("블러드 파운틴");
+            Debug.Log("블러드 파운틴 발동");
             bossactive.bossanimator.SetTrigger("BossBloodTrig");
         }
-        else if (skillnumber == 4 && cool4 <= 0)
+        // 4. 핏빛 매화 (체력 10% 이하 + 거리 5m)
+        else if (skillnumber == 4 && cool4 <= 0 && isNear && hpPercent <= 10f)
         {
             cool4 = cool4m;
-            Debug.Log("핏빛 매화");
+            Debug.Log("핏빛 매화 발동");
             bossactive.blood_cool = 0.5f;
             bossactive.blood_level = 0;
             bossactive.IsBlood = true;
         }
         else
         {
+            // 조건 안 맞으면 기본 공격
             Debug.Log("기본 공격");
             bossactive.bossanimator.SetTrigger("BossAtkTrig");
         }

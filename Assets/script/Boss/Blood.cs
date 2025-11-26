@@ -1,35 +1,30 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Blood : MonoBehaviour
+public class Blood : BossAttackBase
 {
-    Bossactive bossactive;
-    GameObject player;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        this.bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
-        this.player = GameObject.Find("player");
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (bossactive.IsAttacking == false)
+        if (bossactive != null && bossactive.IsAttacking == false)
         {
             Destroy(gameObject);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        // 만약 들어온 오브젝트의 태그가 Player면
-        if (other.CompareTag("Player"))
+        Playeractive player = other.GetComponent<Playeractive>();
+        if (player != null)
         {
-            bossactive.ATKBuff = true;
-            bossactive.coolATK = 10.0f;
-            Debug.Log("플레이어의 체력 감소"); //최대 체력의 15%만큼 감소
+            // 1. 데미지 (최대 체력 15%)
+            float damageAmount = player.MaxHp * 0.15f;
+            Debug.Log($"블러드 파운틴 적중! (데미지: {damageAmount})");
+            player.TakeDamage(damageAmount);
+
+            // 2. 보스 버프 (공격력 50% 증가, 10초)
+            if (bossactive != null)
+            {
+                bossactive.ApplyAtkBuff(1.5f, 10.0f);
+            }
         }
     }
 }
