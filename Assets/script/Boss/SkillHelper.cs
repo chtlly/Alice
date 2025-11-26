@@ -20,6 +20,7 @@ public class SkillHelper : MonoBehaviour
         phase = 1;
         skillphase = 3;
         cool1m = 15.0f; cool2m = 12.0f; cool3m = 10.0f; cool4m = 15.0f;
+        //1: 15.0f->10.0f / 2: 12.0f->9.0f / 3: 10.0f; / 4: 15.0f;
         cool1 = 5.0f; cool2 = 5.0f; cool3 = 5.0f; cool4 = 5.0f; //첫 쿨타임은 게임의 재미를 위해 5초로 설정.
 
         //테스트용
@@ -32,15 +33,16 @@ public class SkillHelper : MonoBehaviour
     void Update()
     {
         //체력에 따른 페이스 변화
-        /*if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 30 && phase != 3)
+        /*if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 30 && bossactive.CurrentHp > (bossactive.MaxHp / 100) * 10)
         {
-            phase = 2;
-            cool1m = 10.0f; cool2m = 9.0f; cool3m = 10.0f; cool3 = cool3m;
+            phase = 2; skillphase = 4;
+            cool1m = 10.0f; cool2m = 9.0f;
+            cool3 = 5.0f;
         }
         else if (bossactive.CurrentHp <= (bossactive.MaxHp / 100) * 10)
         {
-            phase = 3;
-            cool4m = 15.0f; cool4 = cool4m;
+            phase = 3; skillphase = 5;
+            cool4 = 5.0f;
         }*/
 
         //스킬 쿨타임 감소
