@@ -6,10 +6,13 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    [Header("만들어둔 UI를 여기에 드래그하세요")]
-    // 변수 이름을 유니티 오브젝트 이름과 똑같이 바꿨습니다.
+    [Header("HP UI 연결")]
     public Image Hp_Bar;
     public TextMeshProUGUI HPText;
+
+    [Header("Mana UI 연결")] // [추가됨]
+    public Image Mana_Bar;
+    public TextMeshProUGUI ManaText;
 
     void Awake()
     {
@@ -24,19 +27,30 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // 이 함수 이름은 그대로라 앨리스 코드 수정 안 해도 됩니다.
     public void UpdateHP(float currentHp, float maxHp)
     {
-        // 1. Hp_Bar 채우기
         if (Hp_Bar != null)
         {
             Hp_Bar.fillAmount = currentHp / maxHp;
         }
 
-        // 2. HPText 글자 바꾸기
         if (HPText != null)
         {
             HPText.text = $"{currentHp:F0} / {maxHp:F0}";
+        }
+    }
+
+    // [추가됨] 마나 업데이트 함수
+    public void UpdateMana(float currentMana, float maxMana)
+    {
+        if (Mana_Bar != null)
+        {
+            Mana_Bar.fillAmount = currentMana / maxMana;
+        }
+
+        if (ManaText != null)
+        {
+            ManaText.text = $"{currentMana:F0} / {maxMana:F0}";
         }
     }
 }

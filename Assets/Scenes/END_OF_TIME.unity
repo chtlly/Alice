@@ -2539,7 +2539,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_Sprite: {fileID: -2005445498762842147, guid: 5ae66cdb9ed595844a3a77c509e56b81, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2585,7 +2585,7 @@ MonoBehaviour:
   traceend: 1
   MaxHp: 10000
   CurrentHp: 0
-  BasicATK: 0
+  BasicATK: 30
   ATK: 0
   Defense: 10
   isAtkBuffed: 0

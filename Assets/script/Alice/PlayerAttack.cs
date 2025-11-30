@@ -6,28 +6,17 @@ public class PlayerAttack : PlayerAttackBase
 
     void Start()
     {
-        if (Playeractive.instance != null)
-        {
-            // 부모의 Setup을 호출해서 공격력 전달 + 안전장치 해제(isSetup = true)
-            base.Setup(Playeractive.instance.Attack);
-        }
-        Invoke("DestroyEffect", lifeTime);
+        // Playeractive에서 InitAttack을 호출해줄 때까지 대기
+    }
+
+    public void InitAttack(float damage, float duration)
+    {
+        base.Setup(damage);
+        Invoke("DestroyEffect", duration);
     }
 
     void DestroyEffect()
     {
-        if (Playeractive.instance != null)
-        {
-            Playeractive.instance.ResetAttackCooldown();
-        }
         Destroy(gameObject);
-    }
-
-    protected override void OnHitBoss(Bossactive boss)
-    {
-        if (Playeractive.instance != null)
-        {
-            Playeractive.instance.ResetAttackCooldown();
-        }
     }
 }
