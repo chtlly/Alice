@@ -4,29 +4,39 @@ public class PlayerAttackBase : MonoBehaviour
 {
     protected float damage;
 
+    // [추가] 안전장치: 세팅이 끝나기 전엔 충돌 무시
+    protected bool isSetup = false;
+
+    // 관통 여부 스위치 (기본값: true = 맞으면 사라짐)
+    public bool destroyOnHit = true;
+
     public virtual void Setup(float dmg)
     {
         this.damage = dmg;
+        this.isSetup = true; // [핵심] 이제부터 충돌 판정 시작!
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
+        // 1. 아직 세팅 안 됐으면 무시 (관통 설정 전에 삭제되는 것 방지)
+        if (isSetup == false) return;
+
+        // 2. 보스 확인
         Bossactive boss = other.GetComponent<Bossactive>();
 
         if (boss != null)
         {
-            // 데미지 주기
             boss.TakeDamage(damage);
-
-            // 자식들에게 "나 맞췄어!"라고 알림 (쿨타임 리셋 등을 위해)
             OnHitBoss(boss);
 
-            // 할 일 다 했으니 삭제
-            Destroy(gameObject);
+            // 3. 스위치 확인: 켜져 있을 때만 삭제 (꺼져있으면 관통)
+            if (destroyOnHit)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
-    // 자식들이 덮어쓸 수 있는 함수
     protected virtual void OnHitBoss(Bossactive boss)
     {
     }
