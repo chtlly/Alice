@@ -664,10 +664,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.31698456
-    y: 0
-    width: 0.6975477
-    height: 0.75294125
+    x: 0
+    y: 0.055876687
+    width: 1
+    height: 0.88921005
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -1021,8 +1021,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1246589773}
   - component: {fileID: 1246589772}
-  - component: {fileID: 1246589770}
-  - component: {fileID: 1246589769}
+  - component: {fileID: 1246589775}
+  - component: {fileID: 1246589774}
   m_Layer: 0
   m_Name: House
   m_TagString: Untagged
@@ -1030,42 +1030,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1246589769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1246589768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd23119439811ee4cb7029c263b961ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionTrigger
-  dialogueText:
-  - "\uC774\uC57C\uAE30 123 \uC774\uC57C\uAE30 123 \uC774\uC57C\uAE30 123 \uC774\uC57C\uAE30
-    123 \uC774\uC57C\uAE30 123 "
-  - "\uC774\uC57C\uAE30 456 \uC774\uC57C\uAE30 456 \uC774\uC57C\uAE30 456 \uC774\uC57C\uAE30
-    456 \uC774\uC57C\uAE30 456 "
-  - "\uC774\uC57C\uAE30 789 \uC774\uC57C\uAE30 789 \uC774\uC57C\uAE30 789 \uC774\uC57C\uAE30
-    789 \uC774\uC57C\uAE30 789 "
-  talkPromptUI: {fileID: 0}
-  npcPortrait: {fileID: -8354480567588709655, guid: 9bf4c876250785b488249c3918abf29e, type: 3}
---- !u!114 &1246589770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1246589768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d5e674bb91ae8f48ae75ba7c636c94c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TalkManager
-  talkPanel: {fileID: 0}
-  talkText: {fileID: 0}
-  npcPortrait: {fileID: 0}
 --- !u!212 &1246589772
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1139,6 +1103,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1246589774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246589768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 980f6111bbfc5ce44bc910069bddf36b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scene_Changer
+  sceneName: shop
+--- !u!61 &1246589775
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246589768}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 21.5, y: 20.3125}
+    newSize: {x: 5.07, y: 6.21}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 21.5, y: 20.3125}
+  m_EdgeRadius: 0
 --- !u!1 &1345281538
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,8 @@ public abstract class CharacterBase : MonoBehaviour
 {
     public float MaxHP { get; protected set; }
     public float CurrentHP { get; protected set; }
-    public float ATK { get; protected set; }
+    //상속으로 구현하느라 지워둠
+    //public float ATK { get; protected set; }
 
     public Vector3 Position => transform.position;
     public CharacterState CurrentState { get; protected set; }
@@ -21,7 +22,8 @@ public abstract class CharacterBase : MonoBehaviour
     {
         MaxHP = maxHP;
         CurrentHP = MaxHP;
-        ATK = atk;
+        // 상속으로 구현하느라 지워둠
+        //ATK = atk;
         CurrentState = CharacterState.Idle;
     }
 
@@ -37,11 +39,22 @@ public abstract class CharacterBase : MonoBehaviour
             Die();
         }
     }
-
-    public abstract void Attack(CharacterBase target);
+    // 상속으로 구현하느라 지워둠
+    //public abstract void Attack(CharacterBase target);
 
     protected virtual void Die()
     {
         CurrentState = CharacterState.Dead;
+    }
+
+    public virtual void Heal(int amount)
+    {
+        if (CurrentState == CharacterState.Dead) return;
+
+        CurrentHP += amount;
+        if (CurrentHP > MaxHP)
+        {
+            CurrentHP = MaxHP;
+        }
     }
 }

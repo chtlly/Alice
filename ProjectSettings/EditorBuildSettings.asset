@@ -48,7 +48,7 @@ EditorBuildSettings:
     path: Assets/Scenes/game/Spring.unity
     guid: 5333bedbf2c2707419a223dc23c73311
   - enabled: 1
-    path: Assets/Scenes/game/shop_modify.unity
+    path: Assets/Scenes/game/shop.unity
     guid: 09a77bca6e87a4043b3ce783f2802706
   - enabled: 1
     path: Assets/Scenes/game/autumn.unity

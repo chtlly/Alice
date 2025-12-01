@@ -23,9 +23,15 @@ public class InteractionTrigger : MonoBehaviour
 
     private void Start()
     {
-        if (talkPromptUI != null)
+        if (talkPromptUI == null)
         {
-            talkPromptUI.SetActive(false);
+            // 주의: Hierarchy에 있는 실제 말풍선 오브젝트의 이름과 똑같아야 합니다.
+            GameObject foundObj = GameObject.Find("TalkPromptUI");
+
+            if (foundObj != null)
+            {
+                talkPromptUI = foundObj;
+            }
         }
     }
 
@@ -64,20 +70,20 @@ public class InteractionTrigger : MonoBehaviour
         // 플레이어가 범위 안에 있고(isPlayerInRange) 스페이스 바를 누르면
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.Space))
         {
-                // 대화창이 이미 활성화되어 있으면 다음 대화로 넘기기
-                if (TalkManager.instance.talkPanel.activeSelf)
-                {
-                    TalkManager.instance.NextTalk();
-                }
-                else // 대화창이 비활성화 상태라면 (처음 대화 시작) & npc Sprite 넘겨주기
-                {
+            // 대화창이 이미 활성화되어 있으면 다음 대화로 넘기기
+            if (TalkManager.instance.talkPanel.activeSelf)
+            {
+                TalkManager.instance.NextTalk();
+            }
+            else // 대화창이 비활성화 상태라면 (처음 대화 시작) & npc Sprite 넘겨주기
+            {
                 TalkManager.instance.StartTalk(dialogueText, npcPortrait);
-                    if (talkPromptUI != null)
-                    {
-                        talkPromptUI.SetActive(false);
-                    }
+                if (talkPromptUI != null)
+                {
+                    talkPromptUI.SetActive(false);
                 }
-            
+            }
+
         }
     }
 }

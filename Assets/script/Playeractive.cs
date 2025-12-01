@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-public class Playeractive : MonoBehaviour
+using System.Collections.Generic;
+//using static Player_Status;
+public class Playeractive : CharacterBase
 {
+    [Header("Gold")]
+    public int gold = 1000; // 테스트
+
     public Vector2 inputVec;
     public float speed;
     public static Playeractive instance; // 싱글톤 인스턴스
@@ -10,7 +14,7 @@ public class Playeractive : MonoBehaviour
     Rigidbody2D rigid; //물리 연산을 담당
     SpriteRenderer spriter; // 스프라이트 이미지 렌더링
     Animator anim; // 애니메이션
-
+    
     void Awake()
     {
         if (instance != null)
@@ -32,6 +36,11 @@ public class Playeractive : MonoBehaviour
 
     }
 
+    void Start()
+    {
+        InitializeStats(100, 10); // 나중에 값 변경
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // 새로운 씬에서 "StartPoint" 오브젝트 찾기
@@ -44,10 +53,30 @@ public class Playeractive : MonoBehaviour
         }
     }
 
-
+    public bool BuyItem(Item item)
+    {
+        if (gold < item.price)
+        {
+            Debug.Log("돈이 부족합니다");
+            return false;
+        }
+        else {
+            if (QuickSlotController.instance.AddItem(item))
+            {
+                gold -= item.price;
+                Debug.Log($"구매 {item.itemName}. 남은 돈: {gold}");
+                return true;
+            }
+            else
+            {
+                Debug.Log("슬롯을 확인해 주세요");
+                return false;
+            }
+        }
+    }
     void Update()
-    {// 매 프레임마다 호출되는 함수 
-
+    {
+        // 매 프레임마다 호출되는 함수 
         if (TalkManager.instance != null && TalkManager.isTalking)
         {
             inputVec = Vector2.zero; // 입력 벡터를 0으로 초기화
@@ -69,8 +98,6 @@ public class Playeractive : MonoBehaviour
        rigid.MovePosition(rigid.position + nextVec); //실시간 위치 업데이트
     }
 
-   
-
     private void LateUpdate()
     {// 카메라나 애니메이션처럼 다른 오브젝트의 행동에 영향을 받을 경우에 사용
 
@@ -88,8 +115,6 @@ public class Playeractive : MonoBehaviour
             spriter.flipX = inputVec.x < 0;
         }
     }
-
-
 }
 
 

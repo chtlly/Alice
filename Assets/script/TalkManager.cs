@@ -14,12 +14,10 @@ public class TalkManager : MonoBehaviour
     private string[] talkData; // 여러 대사를 담을 배열
     private int talkIndex; // 현재 대화 순서
 
-    
+
 
     private void Awake()
     {
-
-
         // 인스턴스가 없으면 자신을 할당
         if (instance == null)
         {
@@ -27,8 +25,10 @@ public class TalkManager : MonoBehaviour
 
             //DontDestroyOnLoad(gameObject);
         }
-      
-
+        else
+        {
+            //Destroy(gameObject);
+        }
     }
 
     void Start()
@@ -51,7 +51,7 @@ public class TalkManager : MonoBehaviour
         npcPortrait.gameObject.SetActive(true);
         npcPortrait.sprite = npcSprite;
         npcPortrait.color = Color.white;
-        
+
 
     }
 

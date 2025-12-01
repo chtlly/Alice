@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - InteractionUI
+  - TalkPanel
+  - Portrait
+  - TalkPrompt
   layers:
   - Default
   - TransparentFX
