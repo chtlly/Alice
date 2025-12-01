@@ -129,6 +129,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::furcontroller
   moveSpeed: 3
   attackRange: 5
+  attackCooldown: 2
+  projectilePrefab: {fileID: 2116439277491523162, guid: ced240e0a454de94ba92bb0cec29941d, type: 3}
+  firePoint: {fileID: 0}
 --- !u!50 &3098468768275852524
 Rigidbody2D:
   serializedVersion: 5

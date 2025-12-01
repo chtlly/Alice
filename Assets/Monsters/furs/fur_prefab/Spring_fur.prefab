@@ -97,8 +97,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 482918555386090175, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4885612517415702014}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4946915851008535291, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3899755525829043721}
   m_SourcePrefab: {fileID: 100100000, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}
+--- !u!1 &1639742808486975142 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4946915851008535291, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}
+  m_PrefabInstance: {fileID: 5937838484323761245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-3899755525829043721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639742808486975142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ca16af4183bc5240bd3e1ac288d26cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterStats
+  maxHealth: 260
+  attackDamage: 37
+  defense: 22
+  expReward: 1
+  goldReward: 6
 --- !u!4 &6112751911867870946 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 482918555386090175, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}

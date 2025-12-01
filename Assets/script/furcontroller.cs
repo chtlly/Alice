@@ -53,13 +53,13 @@ public class furcontroller : MonoBehaviour
         directionToPlayer.Normalize();
 
         // 2. 행동 결정 (감지 범위 체크 없이 바로 사거리만 체크)
-        // 공격 사거리보다 멀리 있다면? -> 무조건 추적!
+        // 공격 사거리보다 멀리 있다면 추적
         if (distanceToPlayer > attackRange)
         {
             movement = directionToPlayer; // 이동 방향 설정
             // animator.SetBool("IsChasing", true); // (필요하다면) 걷는 애니메이션 유지
         }
-        // 공격 사거리 안으로 들어왔다면? -> 멈춰서 공격!
+        // 공격 사거리 안으로 들어왔다면 멈춰서 공격
         else
         {
             movement = Vector2.zero; // 정지

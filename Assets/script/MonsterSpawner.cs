@@ -50,6 +50,13 @@ public class MonsterSpawner : MonoBehaviour
         GameObject newMonster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
         newMonster.name = monsterPrefab.name + "_" + currentCount;
 
+        //몬스터에게 스탯 스크립트가 있다면 스포너 정보를 넘겨줌
+        MonsterStats stats = newMonster.GetComponent<MonsterStats>();
+        if (stats != null)
+        {
+            stats.Setup(this);
+        }
+
         currentCount++;
     }
 
