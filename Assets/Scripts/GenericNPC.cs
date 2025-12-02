@@ -8,7 +8,7 @@ public class GenericNPC : MonoBehaviour
 
     // NPC 데이터
     [Header("NPC Data")]
-    public Sprite npcPortrait; // 이 NPC의 일러스트 스프라이트
+    public Sprite npcPortrait;
 
     // Dialogue System References
     private GameIntroManager dialogueManager;
@@ -20,28 +20,36 @@ public class GenericNPC : MonoBehaviour
 
     private bool isPlayerNearby = false;
 
+    // [추가] 플레이어 스크립트 참조 저장
+    private Playeractive cachedPlayer;
+    // [추가] 현재 이 NPC와 대화가 진행 중인지 체크
+    private bool isInteracting = false;
+
     void Start()
     {
-        // Manager 찾기 (최신 방식)
         dialogueManager = FindAnyObjectByType<GameIntroManager>();
 
-        // UI 초기화
         if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
         if (speechBubbleObject != null) speechBubbleObject.SetActive(false);
     }
 
     void Update()
     {
+        // [추가] 대화 종료 감지 로직
+        // 내가 대화를 시작했는데(isInteracting), Manager가 대화 끝났다고 하면(isStoryActive == false)
+        if (isInteracting && dialogueManager != null && !dialogueManager.isStoryActive)
+        {
+            EndDialogueSequence();
+        }
+
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.Space))
         {
             if (dialogueManager.isStoryActive)
             {
-                // 대화 중일 경우: Manager에게 다음 줄로 넘기라고 지시
                 dialogueManager.NextLine();
             }
             else
             {
-                // 대화 중이 아닐 경우: 대화가 아직 끝나지 않았을 때만 시작
                 if (dialogueLines.Length > 0)
                 {
                     StartDialogueSequence();
@@ -50,12 +58,18 @@ public class GenericNPC : MonoBehaviour
         }
     }
 
-    // 대화 시작 로직 (데이터 전달 및 제어권 인계)
     void StartDialogueSequence()
     {
         if (dialogueManager == null || dialogueLines.Length == 0) return;
 
-        // 1. Manager에게 데이터와 제어권 전달
+        // [추가] 대화 시작 시 플레이어 상태 변경 (투명 + 이동불가)
+        if (cachedPlayer != null)
+        {
+            cachedPlayer.SetDialogueState(true);
+        }
+        isInteracting = true; // 대화 시작됨 표시
+
+        // Manager에게 데이터 전달
         if (dialogueManager.portraitDisplayImage != null && npcPortrait != null)
         {
             dialogueManager.portraitDisplayImage.sprite = npcPortrait;
@@ -67,19 +81,33 @@ public class GenericNPC : MonoBehaviour
             dialogueManager.activeSpeechBubble = speechBubbleObject;
         }
 
-        // 2. 대화 사이클 시작: 모든 라인을 Manager에게 넘깁니다.
         dialogueManager.ShowDialogue(dialogueLines);
 
-        // 대화 시작과 동시에 안내 UI 숨김
         if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
     }
 
-    // 플레이어 접근 감지 (OnTriggerEnter/Exit)
+    // [추가] 대화가 끝났을 때 호출되는 함수
+    void EndDialogueSequence()
+    {
+        isInteracting = false; // 대화 종료 표시
+
+        // 플레이어 상태 원상복구 (보임 + 이동가능)
+        if (cachedPlayer != null)
+        {
+            cachedPlayer.SetDialogueState(false);
+        }
+
+        // (참고: 말풍선 끄기나 UI 처리는 Manager가 하거나 OnTriggerExit에서 처리됨)
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             isPlayerNearby = true;
+            // [추가] 들어온 플레이어 스크립트 저장해두기
+            cachedPlayer = collision.GetComponent<Playeractive>();
+
             if (interactionPromptUI != null) interactionPromptUI.SetActive(true);
         }
     }
@@ -89,9 +117,9 @@ public class GenericNPC : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerNearby = false;
-            if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
+            cachedPlayer = null; // 나갔으니 참조 해제
 
-            // 플레이어가 멀어지면 대화가 끝나지 않았더라도 말풍선을 끕니다.
+            if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
             if (speechBubbleObject != null) speechBubbleObject.SetActive(false);
         }
     }

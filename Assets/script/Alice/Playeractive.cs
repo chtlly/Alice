@@ -12,7 +12,6 @@ public class Playeractive : MonoBehaviour
     public float Attack = 10;
     public float Defense = 10;
 
-    // 공격 설정
     public float AttackSpeed = 1.5f;
     public float attackDelay = 0.4f;
     public float baseEffectLifeTime = 0.5f;
@@ -20,10 +19,8 @@ public class Playeractive : MonoBehaviour
     [Header("Mana Settings")]
     public float MaxMana = 100;
     public float CurrentMana;
-    // [추가] 마나 자연 회복량 (초당 1)
     public float manaRegenRate = 1.0f;
 
-    // 기타 스탯
     public float Exp = 0;
     public int Level = 0;
     public int Money = 0;
@@ -35,6 +32,9 @@ public class Playeractive : MonoBehaviour
     private float curTime = 0.0f;
 
     public bool isAttacking { get; private set; } = false;
+
+    // [추가] 대화 중이라 플레이어가 잠겼는지 확인하는 변수
+    private bool isDialogueLocked = false;
 
     public Vector2 inputVec;
     public float speed;
@@ -78,27 +78,22 @@ public class Playeractive : MonoBehaviour
 
     void Update()
     {
-        // --- [추가됨] 마나 자연 회복 로직 ---
         if (CurrentMana < MaxMana)
         {
-            // 초당 1씩 회복 (Time.deltaTime을 곱해야 프레임 상관없이 1초당 1씩 오름)
             CurrentMana += manaRegenRate * Time.deltaTime;
-
-            // 최대치 넘지 않게 고정
             if (CurrentMana > MaxMana) CurrentMana = MaxMana;
-
-            // UI 갱신 (부드럽게 차오르는 거 보여주기 위해 매 프레임 호출)
             if (UIManager.instance != null)
             {
                 UIManager.instance.UpdateMana(CurrentMana, MaxMana);
             }
         }
-        // ----------------------------------
 
         bool isTalking = (TalkManager.instance != null && TalkManager.isTalking);
         curTime += Time.deltaTime;
 
-        if (isTalking || isAttacking)
+        // [수정] 기존 조건에 'isDialogueLocked' 추가
+        // 대화 모드(GenericNPC)로 잠겨있으면 이동 불가
+        if (isTalking || isAttacking || isDialogueLocked)
         {
             inputVec = Vector2.zero;
         }
@@ -116,9 +111,30 @@ public class Playeractive : MonoBehaviour
             if (attackSpawnPoint != null) attackSpawnPoint.localPosition = mouseDir * attackSpawnDistance;
         }
 
-        if (Input.GetButtonDown("Fire1") && curTime >= (1.0f / AttackSpeed) && !isAttacking)
+        // [수정] 대화 중 잠겨있으면(isDialogueLocked) 공격도 못하게 조건 추가
+        if (Input.GetButtonDown("Fire1") && curTime >= (1.0f / AttackSpeed) && !isAttacking && !isDialogueLocked)
         {
             StartCoroutine(AttackRoutine());
+        }
+    }
+
+    // [추가] NPC가 호출할 함수: 플레이어를 안 보이게 하고 움직임도 막음
+    public void SetDialogueState(bool isActive)
+    {
+        isDialogueLocked = isActive; // 이동 및 공격 잠금/해제
+
+        if (spriter != null)
+        {
+            // 대화 중(isActive == true)이면 스프라이트를 끕니다 -> 투명해짐
+            // 대화 끝(isActive == false)이면 스프라이트를 켭니다 -> 다시 보임
+            spriter.enabled = !isActive;
+        }
+
+        // 잠기는 순간 미끄러지지 않게 속도 0으로 고정
+        if (isActive)
+        {
+            inputVec = Vector2.zero;
+            if (rigid != null) rigid.linearVelocity = Vector2.zero;
         }
     }
 
