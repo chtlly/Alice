@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic; // 리스트 사용을 위해 추가
 
 public class Playeractive : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class Playeractive : MonoBehaviour
     public float Attack = 10;
     public float Defense = 10;
 
+    // [공격 설정]
     public float AttackSpeed = 1.5f;
+    public float maxAttackSpeed = 3.0f; // [추가] 공속 최대치 제한
     public float attackDelay = 0.4f;
     public float baseEffectLifeTime = 0.5f;
 
@@ -20,20 +23,22 @@ public class Playeractive : MonoBehaviour
     public float MaxMana = 100;
     public float CurrentMana;
     public float manaRegenRate = 1.0f;
+    public float maxManaRegen = 10.0f; // [추가] 마나 재생 최대치 제한
 
+    [Header("Level Settings")]
+    public int Level = 1;
     public float Exp = 0;
-    public int Level = 0;
+    public float MaxExp = 100;
     public int Money = 0;
 
     public GameObject attackEffectPrefab;
     public Transform attackSpawnPoint;
     public float attackSpawnDistance = 2.7f;
 
+    public GameObject damageTextPrefab;
+
     private float curTime = 0.0f;
-
     public bool isAttacking { get; private set; } = false;
-
-    // [추가] 대화 중이라 플레이어가 잠겼는지 확인하는 변수
     private bool isDialogueLocked = false;
 
     public Vector2 inputVec;
@@ -64,6 +69,7 @@ public class Playeractive : MonoBehaviour
         {
             UIManager.instance.UpdateHP(CurrentHp, MaxHp);
             UIManager.instance.UpdateMana(CurrentMana, MaxMana);
+            UIManager.instance.UpdateExp(Exp, MaxExp, Level);
         }
     }
 
@@ -82,6 +88,7 @@ public class Playeractive : MonoBehaviour
         {
             CurrentMana += manaRegenRate * Time.deltaTime;
             if (CurrentMana > MaxMana) CurrentMana = MaxMana;
+
             if (UIManager.instance != null)
             {
                 UIManager.instance.UpdateMana(CurrentMana, MaxMana);
@@ -91,8 +98,6 @@ public class Playeractive : MonoBehaviour
         bool isTalking = (TalkManager.instance != null && TalkManager.isTalking);
         curTime += Time.deltaTime;
 
-        // [수정] 기존 조건에 'isDialogueLocked' 추가
-        // 대화 모드(GenericNPC)로 잠겨있으면 이동 불가
         if (isTalking || isAttacking || isDialogueLocked)
         {
             inputVec = Vector2.zero;
@@ -111,30 +116,9 @@ public class Playeractive : MonoBehaviour
             if (attackSpawnPoint != null) attackSpawnPoint.localPosition = mouseDir * attackSpawnDistance;
         }
 
-        // [수정] 대화 중 잠겨있으면(isDialogueLocked) 공격도 못하게 조건 추가
         if (Input.GetButtonDown("Fire1") && curTime >= (1.0f / AttackSpeed) && !isAttacking && !isDialogueLocked)
         {
             StartCoroutine(AttackRoutine());
-        }
-    }
-
-    // [추가] NPC가 호출할 함수: 플레이어를 안 보이게 하고 움직임도 막음
-    public void SetDialogueState(bool isActive)
-    {
-        isDialogueLocked = isActive; // 이동 및 공격 잠금/해제
-
-        if (spriter != null)
-        {
-            // 대화 중(isActive == true)이면 스프라이트를 끕니다 -> 투명해짐
-            // 대화 끝(isActive == false)이면 스프라이트를 켭니다 -> 다시 보임
-            spriter.enabled = !isActive;
-        }
-
-        // 잠기는 순간 미끄러지지 않게 속도 0으로 고정
-        if (isActive)
-        {
-            inputVec = Vector2.zero;
-            if (rigid != null) rigid.linearVelocity = Vector2.zero;
         }
     }
 
@@ -164,6 +148,13 @@ public class Playeractive : MonoBehaviour
         isAttacking = false;
     }
 
+    public void SetDialogueState(bool isActive)
+    {
+        isDialogueLocked = isActive;
+        if (spriter != null) spriter.enabled = !isActive;
+        if (isActive) { inputVec = Vector2.zero; if (rigid != null) rigid.linearVelocity = Vector2.zero; }
+    }
+
     public void SetGlobalDelay(float duration)
     {
         StopCoroutine("GlobalDelayRoutine");
@@ -186,7 +177,20 @@ public class Playeractive : MonoBehaviour
         finalDamage = Mathf.Floor(finalDamage);
         CurrentHp -= finalDamage;
         if (UIManager.instance != null) UIManager.instance.UpdateHP(CurrentHp, MaxHp);
-        if (CurrentHp <= 0) gameObject.SetActive(false);
+
+        if (CurrentHp <= 0)
+        {
+            CurrentHp = MaxHp;
+            CurrentMana = MaxMana;
+            isAttacking = false;
+            isDialogueLocked = false;
+            if (UIManager.instance != null)
+            {
+                UIManager.instance.UpdateHP(CurrentHp, MaxHp);
+                UIManager.instance.UpdateMana(CurrentMana, MaxMana);
+            }
+            SceneManager.LoadScene("Start_0");
+        }
         return finalDamage;
     }
 
@@ -206,6 +210,104 @@ public class Playeractive : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void GainExp(float amount)
+    {
+        Exp += amount;
+
+        while (Exp >= MaxExp)
+        {
+            Exp -= MaxExp;
+            LevelUp();
+        }
+
+        if (UIManager.instance != null) UIManager.instance.UpdateExp(Exp, MaxExp, Level);
+    }
+
+    void LevelUp()
+    {
+        Level++;
+        MaxExp = MaxExp * 1.2f;
+
+        // 확정 스탯 증가
+        MaxHp += 20;
+        CurrentHp = MaxHp;
+        MaxMana += 10;
+        CurrentMana = MaxMana;
+
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateHP(CurrentHp, MaxHp);
+            UIManager.instance.UpdateMana(CurrentMana, MaxMana);
+        }
+
+        // [핵심 수정] 스마트 랜덤 스탯 뽑기
+        // 1. 올릴 수 있는 스탯 후보를 리스트에 담음
+        List<int> availableStats = new List<int>();
+
+        availableStats.Add(0); // 공격력 (무제한)
+        availableStats.Add(1); // 방어력 (무제한)
+
+        // 마나 재생이 최대치보다 작을 때만 후보에 추가
+        if (manaRegenRate < maxManaRegen)
+        {
+            availableStats.Add(2);
+        }
+
+        // 공속이 최대치보다 작을 때만 후보에 추가
+        if (AttackSpeed < maxAttackSpeed)
+        {
+            availableStats.Add(3);
+        }
+
+        // 2. 후보 중에서 하나 뽑기
+        int randIndex = Random.Range(0, availableStats.Count);
+        int selectedStat = availableStats[randIndex];
+
+        string bonusStatText = "";
+
+        switch (selectedStat)
+        {
+            case 0:
+                Attack += 2;
+                bonusStatText = "ATK +2";
+                break;
+            case 1:
+                Defense += 1;
+                bonusStatText = "DEF +1";
+                break;
+            case 2:
+                manaRegenRate += 0.5f;
+                // 최대치 넘지 않게 보정
+                if (manaRegenRate > maxManaRegen) manaRegenRate = maxManaRegen;
+                bonusStatText = "Mana Regen +0.5";
+                break;
+            case 3:
+                AttackSpeed += 0.5f;
+                // 최대치 넘지 않게 보정
+                if (AttackSpeed > maxAttackSpeed) AttackSpeed = maxAttackSpeed;
+                bonusStatText = "ASP +0.5";
+                break;
+        }
+
+        StartCoroutine(ShowLevelUpText(bonusStatText));
+    }
+
+    IEnumerator ShowLevelUpText(string bonusText)
+    {
+        if (damageTextPrefab != null)
+        {
+            Vector3 textPos = transform.position + new Vector3(0, 2.0f, -5.0f);
+
+            GameObject levelUpObj = Instantiate(damageTextPrefab, textPos, Quaternion.identity);
+            levelUpObj.GetComponent<FloatingText>().SetText("Level Up!", Color.yellow);
+
+            yield return new WaitForSeconds(0.5f);
+
+            GameObject statObj = Instantiate(damageTextPrefab, textPos, Quaternion.identity);
+            statObj.GetComponent<FloatingText>().SetText(bonusText, Color.cyan);
+        }
     }
 
     void SpawnAttackEffect(Vector2 direction)

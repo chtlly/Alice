@@ -2,32 +2,33 @@
 
 public class GenericNPC : MonoBehaviour
 {
-    // Dialogue Content
+    // 대화 내용 설정
     [TextArea(3, 5)]
     public string[] dialogueLines;
 
-    // NPC 데이터
+    // NPC 일러스트
     [Header("NPC Data")]
     public Sprite npcPortrait;
 
-    // Dialogue System References
+    // 대화 매니저 참조
     private GameIntroManager dialogueManager;
 
-    // Interaction & UI Settings
+    // UI 설정
     [Header("UI 및 상호작용 설정")]
-    public GameObject interactionPromptUI;
-    public GameObject speechBubbleObject;
+    public GameObject interactionPromptUI; // "F키를 누르세요" 같은 안내창
+    public GameObject speechBubbleObject;  // 말풍선
 
     private bool isPlayerNearby = false;
 
-    // [추가] 플레이어 스크립트 참조 저장
+    // 플레이어 제어를 위해 저장해둘 변수
     private Playeractive cachedPlayer;
-    // [추가] 현재 이 NPC와 대화가 진행 중인지 체크
     private bool isInteracting = false;
 
     void Start()
     {
-        dialogueManager = FindAnyObjectByType<GameIntroManager>();
+        // 매니저 찾기 (최신 유니티 버전 호환)
+        dialogueManager = FindFirstObjectByType<GameIntroManager>();
+        // 만약 빨간줄 뜨면 FindAnyObjectByType<GameIntroManager>(); 로 변경
 
         if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
         if (speechBubbleObject != null) speechBubbleObject.SetActive(false);
@@ -35,24 +36,24 @@ public class GenericNPC : MonoBehaviour
 
     void Update()
     {
-        // [추가] 대화 종료 감지 로직
-        // 내가 대화를 시작했는데(isInteracting), Manager가 대화 끝났다고 하면(isStoryActive == false)
+        // 대화 종료 감지: 내가 대화를 걸었는데(isInteracting), 매니저가 대화 끝났다고(isStoryActive == false) 하면
         if (isInteracting && dialogueManager != null && !dialogueManager.isStoryActive)
         {
             EndDialogueSequence();
         }
 
+        // 대화 시작 입력
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.Space))
         {
             if (dialogueManager.isStoryActive)
             {
-                dialogueManager.NextLine();
+                dialogueManager.NextLine(); // 다음 대사로 넘기기
             }
             else
             {
                 if (dialogueLines.Length > 0)
                 {
-                    StartDialogueSequence();
+                    StartDialogueSequence(); // 대화 시작
                 }
             }
         }
@@ -62,14 +63,14 @@ public class GenericNPC : MonoBehaviour
     {
         if (dialogueManager == null || dialogueLines.Length == 0) return;
 
-        // [추가] 대화 시작 시 플레이어 상태 변경 (투명 + 이동불가)
+        // [핵심] 플레이어 얼리기 & 숨기기
         if (cachedPlayer != null)
         {
             cachedPlayer.SetDialogueState(true);
         }
-        isInteracting = true; // 대화 시작됨 표시
+        isInteracting = true;
 
-        // Manager에게 데이터 전달
+        // 매니저에게 이미지랑 대사 전달
         if (dialogueManager.portraitDisplayImage != null && npcPortrait != null)
         {
             dialogueManager.portraitDisplayImage.sprite = npcPortrait;
@@ -86,18 +87,15 @@ public class GenericNPC : MonoBehaviour
         if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
     }
 
-    // [추가] 대화가 끝났을 때 호출되는 함수
     void EndDialogueSequence()
     {
-        isInteracting = false; // 대화 종료 표시
+        isInteracting = false;
 
-        // 플레이어 상태 원상복구 (보임 + 이동가능)
+        // [핵심] 플레이어 다시 움직이게 & 보이게 하기
         if (cachedPlayer != null)
         {
             cachedPlayer.SetDialogueState(false);
         }
-
-        // (참고: 말풍선 끄기나 UI 처리는 Manager가 하거나 OnTriggerExit에서 처리됨)
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -105,7 +103,7 @@ public class GenericNPC : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerNearby = true;
-            // [추가] 들어온 플레이어 스크립트 저장해두기
+            // 들어온 플레이어 스크립트 저장
             cachedPlayer = collision.GetComponent<Playeractive>();
 
             if (interactionPromptUI != null) interactionPromptUI.SetActive(true);
@@ -117,7 +115,7 @@ public class GenericNPC : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerNearby = false;
-            cachedPlayer = null; // 나갔으니 참조 해제
+            cachedPlayer = null; // 나가면 참조 해제
 
             if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
             if (speechBubbleObject != null) speechBubbleObject.SetActive(false);

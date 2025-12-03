@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 using System.Runtime.CompilerServices;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
-using TMPro; // 텍스트 색상 변경을 위해 추가
+using TMPro;
 
 public class Bossactive : MonoBehaviour
 {
@@ -20,6 +20,13 @@ public class Bossactive : MonoBehaviour
     public float ATK;
     public float Defense = 10.0f;
 
+    // 몸통 박치기 관련
+    public float touchDamage = 50.0f;
+    private float lastTouchTime = 0.0f;
+    public float touchInterval = 0.5f;
+
+    public float attackYRange = 1.0f;
+
     public bool isAtkBuffed = false;
     public float atkBuffTimer = 0.0f;
     private float currentBuffMultiplier = 1.0f;
@@ -27,6 +34,10 @@ public class Bossactive : MonoBehaviour
     public float MAXATK;
     public bool ATKBuff;
     public float coolATK;
+
+    // 공격 빈도 조절
+    public float attackDelay = 1.5f;
+    private float currentWaitTime = 0.0f;
 
     public bool IsIdle = true;
     public bool IsTracing = false;
@@ -45,9 +56,11 @@ public class Bossactive : MonoBehaviour
     public float blood_coolm = 0.3f;
     public float blood_level;
 
-    public GameObject damageTextPrefab;
+    [Header("UI 연결")]
+    public GameObject damageTextPrefab; // 데미지 텍스트 (숫자)
+    public BossHPBar bossHPBar;         // [추가됨] 머리 위 체력바 스크립트
 
-    // --- 스킬 함수들 (기존 유지) ---
+    // --- 스킬 함수들 ---
     public void Basic_ATK()
     {
         Debug.Log("기본 공격 중");
@@ -84,6 +97,7 @@ public class Bossactive : MonoBehaviour
         Debug.Log("스킬 끝");
         IsAttacking = false;
         IsIdle = true;
+        currentWaitTime = attackDelay;
         this.bossanimator.SetTrigger("BossIdleTrig");
     }
 
@@ -108,6 +122,13 @@ public class Bossactive : MonoBehaviour
         bossrenderer = GetComponent<SpriteRenderer>();
         bossanimator = GetComponent<Animator>();
 
+        // [추가] 시작할 때 HP바 찾고 초기화
+        if (bossHPBar == null)
+            bossHPBar = GetComponentInChildren<BossHPBar>();
+
+        if (bossHPBar != null)
+            bossHPBar.UpdateHP(CurrentHp, MaxHp);
+
         IsIdle = true;
     }
 
@@ -119,6 +140,7 @@ public class Bossactive : MonoBehaviour
         Vector2 pp = this.player.transform.position;
         Vector2 tracedir = pp - pb;
         float d = tracedir.magnitude;
+        float yDiff = Mathf.Abs(tracedir.y);
 
         if (tracedir.x < 0) bossrenderer.flipX = true;
         else bossrenderer.flipX = false;
@@ -137,7 +159,13 @@ public class Bossactive : MonoBehaviour
 
         if (IsIdle)
         {
-            if (d >= tracestart)
+            if (currentWaitTime > 0)
+            {
+                currentWaitTime -= Time.deltaTime;
+                return;
+            }
+
+            if (d >= tracestart || yDiff > attackYRange)
             {
                 IsIdle = false;
                 IsTracing = true;
@@ -152,11 +180,11 @@ public class Bossactive : MonoBehaviour
         }
         else if (IsTracing)
         {
-            if (d >= traceend)
+            if (d >= traceend || yDiff > attackYRange)
             {
                 this.transform.Translate(tracedir * speed * Time.deltaTime);
             }
-            else if (d <= traceend)
+            else if (d <= traceend && yDiff <= attackYRange)
             {
                 IsTracing = false;
                 AttackStart = true;
@@ -209,41 +237,59 @@ public class Bossactive : MonoBehaviour
                 }
                 else if (blood_level == 5)
                 {
+                    Debug.Log("스킬 끝");
                     IsBlood = false; IsAttacking = false; IsIdle = true;
                 }
             }
         }
     }
 
-    // [수정] 피격 함수
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (Time.time >= lastTouchTime + touchInterval)
+            {
+                Playeractive playerScript = other.GetComponent<Playeractive>();
+                if (playerScript != null)
+                {
+                    playerScript.TakeDamage(touchDamage);
+                    Debug.Log("보스 몸통 박치기!");
+                    lastTouchTime = Time.time;
+                }
+            }
+        }
+    }
+
     public void TakeDamage(float rawDamage)
     {
         float damageReduction = (rawDamage * Defense) / (100f + Defense);
         float finalDamage = rawDamage - damageReduction;
-
         if (finalDamage < 1f) finalDamage = 1f;
         finalDamage = Mathf.Floor(finalDamage);
 
         CurrentHp -= finalDamage;
+
+        // [추가] 체력바 갱신
+        if (bossHPBar != null)
+        {
+            bossHPBar.UpdateHP(CurrentHp, MaxHp);
+        }
 
         Debug.Log($"<color=yellow>[BOSS] 피격! 원본:{rawDamage} / 최종:{finalDamage} / 남은체력:{CurrentHp}</color>");
 
         if (damageTextPrefab != null)
         {
             GameObject hud = Instantiate(damageTextPrefab, transform.position, Quaternion.identity);
-
-            // [수정] 높이 3에서 1로 낮춤, Z축 -5로 당김
             hud.transform.position += new Vector3(0, 1.0f, 0.0f);
 
-            // 데미지 텍스트 설정
             FloatingText ft = hud.GetComponent<FloatingText>();
             ft.SetDamage(finalDamage);
 
-            // [추가] 색상을 빨간색으로 강제 변경
             if (ft.GetComponent<TextMeshPro>() != null)
             {
                 ft.GetComponent<TextMeshPro>().color = Color.red;
-                ft.GetComponent<TextMeshPro>().fontSize = 5; // 글자 크기도 키움 (필요시 조절)
+                ft.GetComponent<TextMeshPro>().fontSize = 5;
             }
         }
 
@@ -266,6 +312,13 @@ public class Bossactive : MonoBehaviour
     {
         CurrentHp += amount;
         if (CurrentHp > MaxHp) CurrentHp = MaxHp;
+
+        // [추가] 체력바 갱신
+        if (bossHPBar != null)
+        {
+            bossHPBar.UpdateHP(CurrentHp, MaxHp);
+        }
+
         Debug.Log($"<color=green>[BOSS] 회복! 양: {amount} / 현재 체력: {CurrentHp}</color>");
     }
 }

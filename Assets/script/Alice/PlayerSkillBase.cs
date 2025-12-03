@@ -25,7 +25,6 @@ public class PlayerSkillBase : MonoBehaviour
         if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
     }
 
-    // [중요] virtual을 붙여야 자식(차원도약)이 자기 맘대로 고쳐 쓸 수 있음
     public virtual void TryUseSkill()
     {
         if (currentCooldown > 0)
@@ -43,5 +42,12 @@ public class PlayerSkillBase : MonoBehaviour
 
     protected virtual void ActivateSkill()
     {
+    }
+
+    // [추가됨] 쿨타임을 강제로 0으로 만드는 함수 (리미트 브레이크용)
+    public virtual void ResetCooldown()
+    {
+        currentCooldown = 0.0f;
+        Debug.Log($"[{gameObject.name}] 쿨타임 초기화 완료!");
     }
 }

@@ -1,30 +1,49 @@
 using UnityEngine;
-using TMPro; // TMP 필수
+using TMPro;
 
 public class FloatingText : MonoBehaviour
 {
     public float moveSpeed = 2.0f;
     public float destroyTime = 1.0f;
-    TextMeshPro textMesh;
+    public TextMeshPro textMesh;
 
-    void Awake() // Start보다 빨리 실행됨
+    void Awake()
     {
-        textMesh = GetComponent<TextMeshPro>();
+        if (textMesh == null)
+            textMesh = GetComponent<TextMeshPro>();
     }
 
     void Start()
     {
-        Destroy(gameObject, destroyTime); // 시간 지나면 삭제
+        Destroy(gameObject, destroyTime);
     }
 
     void Update()
     {
-        transform.Translate(Vector3.up * moveSpeed * Time.deltaTime); // 위로 둥둥
+        transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
     }
 
+    // 데미지용 (숫자)
     public void SetDamage(float damage)
     {
         if (textMesh == null) textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = damage.ToString(); // 숫자를 글자로 변환
+        if (textMesh != null)
+        {
+            textMesh.text = damage.ToString();
+            textMesh.color = Color.red;
+            textMesh.fontSize = 4;
+        }
+    }
+
+    // [추가됨] 레벨업용 (글자 + 색상)
+    public void SetText(string message, Color color)
+    {
+        if (textMesh == null) textMesh = GetComponent<TextMeshPro>();
+        if (textMesh != null)
+        {
+            textMesh.text = message;
+            textMesh.color = color;
+            textMesh.fontSize = 5; // 좀 더 크게
+        }
     }
 }

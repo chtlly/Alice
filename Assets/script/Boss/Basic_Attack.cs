@@ -7,11 +7,18 @@ public class Basic_Attack : BossAttackBase
     protected override void Start()
     {
         base.Start();
+
         this.direction = GetComponent<SpriteRenderer>();
         if (bossactive != null)
         {
-            if (bossactive.bossrenderer.flipX == false) this.direction.flipX = true;
-            else this.direction.flipX = false;
+            if (bossactive.bossrenderer.flipX == false)
+            {
+                this.direction.flipX = true;
+            }
+            else
+            {
+                this.direction.flipX = false;
+            }
         }
     }
 
