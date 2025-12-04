@@ -283,6 +283,7 @@ public class Bossactive : MonoBehaviour
         {
             IsAttacking = false;
             IsBlood = false;
+            CurrentHp = 0;
             Destroy(gameObject);
             SceneManager.LoadScene("Boss_Ending");
         }
@@ -297,12 +298,15 @@ public class Bossactive : MonoBehaviour
 
     public void Heal(float amount)
     {
-        CurrentHp += amount;
-        if (CurrentHp > MaxHp) CurrentHp = MaxHp;
-
-        if (bossHPBar != null)
+        if (CurrentHp > 0)
         {
-            bossHPBar.UpdateHP(CurrentHp, MaxHp);
+            CurrentHp += amount;
+            if (CurrentHp > MaxHp) CurrentHp = MaxHp;
+            if (bossHPBar != null)
+            {
+                bossHPBar.UpdateHP(CurrentHp, MaxHp);
+            }
         }
+        
     }
 }
