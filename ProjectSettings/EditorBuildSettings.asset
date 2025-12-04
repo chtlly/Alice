@@ -6,32 +6,50 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Start_1.unity
+    path: Assets/Scenes/Start_0.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/Stage_1.unity
-    guid: 2b12896bb0c05a4428e4b04db487b6cd
+    path: Assets/Scenes/Start_map.unity
+    guid: d7e732aaaeffa814fac7f297f3cee541
   - enabled: 1
-    path: Assets/Scenes/Spring_vil.unity
-    guid: bdee90c727006f34a8c6dcc999863674
+    path: Assets/Scenes/Autumn_Battle.unity
+    guid: 73e57d21a7df60644b4a70885236ae7e
+  - enabled: 0
+    path: Assets/Autumn_Vil.unity
+    guid: 4beb4541655926740b789f59ccbfc9fe
   - enabled: 1
-    path: Assets/Scenes/Stage_2.unity
-    guid: 9ff464199074ef8478d8c1e3ca114dff
+    path: Assets/Scenes/Shop.unity
+    guid: b2a810b8930c7cf49bd6246030b4af9b
   - enabled: 1
-    path: Assets/Scenes/Summer_vil.unity
-    guid: 1cbf07ca4dd57bd48b613a3844acbb02
+    path: Assets/Scenes/Summer_Battle.unity
+    guid: 56372f238d264004897491fa619ea180
   - enabled: 1
-    path: Assets/Scenes/Stage_3.unity
-    guid: ea037399c31cc704d98863497fe61a89
+    path: Assets/Scenes/Autumn.unity
+    guid: 6425a160669397844bc726da4403675a
   - enabled: 1
-    path: Assets/Scenes/Autumn_vil.unity
-    guid: 7125722daaa54da4a8d241f49014e5e4
+    path: Assets/Scenes/Summer.unity
+    guid: 41b65293b7e8af143bf9da1531b4614d
   - enabled: 1
-    path: Assets/Scenes/Stage_4.unity
-    guid: 99f3241758a1e814aa8d4ac8d0f6f8b4
+    path: Assets/Scenes/Winter.unity
+    guid: 5fd6c75284c02b846a006b2d13811e3f
   - enabled: 1
-    path: Assets/Scenes/END_OF_TIME.unity
-    guid: 45b673453aeea7a48a8388a28079f810
+    path: Assets/Scenes/Boss_Battle.unity
+    guid: 8b90a738cc846c1479f79d3648a56bf6
+  - enabled: 1
+    path: Assets/Scenes/Winter_Battle.unity
+    guid: f2e4b0337b808554780b3a416da4844d
+  - enabled: 0
+    path: Assets/Summer_Vil.unity
+    guid: 6ca3c9cfa7d4f074faaf7969b9d5fa1a
+  - enabled: 0
+    path: Assets/Wiinter_Vil.unity
+    guid: 5591f919ad09a9b4a8be093455632aa0
+  - enabled: 0
+    path: Assets/Scenes/Spring_Battle.unity
+    guid: 8941193b0e7600c49a6873bafbd9e526
+  - enabled: 1
+    path: Assets/Scenes/Spring_Battle.unity
+    guid: 8941193b0e7600c49a6873bafbd9e526
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

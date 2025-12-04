@@ -2,147 +2,161 @@ using JetBrains.Annotations;
 using System.Runtime.CompilerServices;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
+using TMPro;
 
 public class Bossactive : MonoBehaviour
 {
     GameObject player;
     public SpriteRenderer bossrenderer;
     public Animator bossanimator;
-    public float speed; //추적 속도
-    public float tracestart; //추적 시작 거리
-    public float traceend; //추적 중단 거리
+    public float speed;
+    public float tracestart;
+    public float traceend;
 
-    //보스의 스탯
-    public float MaxHp;
+    [Header("Boss Stats")]
+    public float MaxHp = 100000.0f;
     public float CurrentHp;
+    public float BasicATK = 100.0f;
     public float ATK;
-    public float BasicATK; //버프 없을 때 공격력
-    public float MAXATK; //버프 받았을 때 공격력
-    public bool ATKBuff; //버프 활성화 여부
-    public float coolATK; //버프 쿨타임 기본 10.0f
+    public float Defense = 10.0f;
 
-    //보스의 상태
-    public bool IsIdle = true; //아무것도 안하는 상태
-    public bool IsTracing = false; //추격 중
-    public bool AttackStart = false; //공격 시작 신호
-    public bool IsAttacking = false; //공격 중이므로 개입하지 말라는 신호
-    public bool IsBlood = false; //핏빛 매화 스킬 사용 중이라는 신호
+    public float touchDamage = 50.0f;
+    private float lastTouchTime = 0.0f;
+    public float touchInterval = 0.5f;
 
-    SkillHelper skillhelper; //스킬 쿨타임 스크립트
-    public GameObject Basic_Effect; //기본 공격 이펙트
-    public GameObject Break_Effect; //브레이크 어스 이펙트
-    public GameObject Destiny_Effect; //운명 이펙트
-    public GameObject Blood_Circle; //블러드 파운틴 이펙트
+    public float attackYRange = 1.0f;
 
+    public bool isAtkBuffed = false;
+    public float atkBuffTimer = 0.0f;
+    private float currentBuffMultiplier = 1.0f;
 
-    //핏빛 매화 스킬에 필요한 것들
+    public float MAXATK;
+    public bool ATKBuff;
+    public float coolATK;
+
+    public float attackDelay = 1.5f;
+    private float currentWaitTime = 0.0f;
+
+    public bool IsIdle = true;
+    public bool IsTracing = false;
+    public bool AttackStart = false;
+    public bool IsAttacking = false;
+    public bool IsBlood = false;
+
+    SkillHelper skillhelper;
+    public GameObject Basic_Effect;
+    public GameObject Break_Effect;
+    public GameObject Destiny_Effect;
+    public GameObject Blood_Circle;
+
     public GameObject Blood0, Blood1, Blood2, Blood3, Blood4;
     public float blood_cool;
     public float blood_coolm = 0.3f;
     public float blood_level;
 
-    //기본 공격
+    [Header("UI 연결")]
+    public GameObject damageTextPrefab;
+    public BossHPBar bossHPBar;
+
     public void Basic_ATK()
     {
-        Debug.Log("기본 공격 중");
         GameObject be = Instantiate(Basic_Effect);
-        //보스의 방향에 따라 생성
         if (this.bossrenderer.flipX == true)
-        {
             be.transform.position = new Vector3(this.transform.position.x - 1, this.transform.position.y, 0);
-        }
-        else if (this.bossrenderer.flipX == false)
-        {
+        else
             be.transform.position = new Vector3(this.transform.position.x + 1, this.transform.position.y, 0);
-        }
     }
 
-    //운명
     public void Destiny()
     {
-        Debug.Log("운명 생성 중");
         GameObject d = Instantiate(Destiny_Effect);
         d.transform.position = this.transform.position;
     }
 
-    //브레이크 어스
     public void Break_Earth()
     {
-        Debug.Log("브레이크 어스 생성 중");
         GameObject b = Instantiate(Break_Effect);
         b.transform.position = this.transform.position;
     }
 
-    //블러드 파운틴
     public void Blood_Fountain()
     {
-        Debug.Log("블러드 파운틴 생성 중");
         GameObject c1 = Instantiate(Blood_Circle);
         c1.transform.position = this.transform.position;
     }
 
-    //스킬 종료
     public void BossSkillend()
     {
-        Debug.Log("스킬 끝");
         IsAttacking = false;
         IsIdle = true;
+        currentWaitTime = attackDelay;
         this.bossanimator.SetTrigger("BossIdleTrig");
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        this.MaxHp = 100.0f;
-        this.CurrentHp = MaxHp;
-        this.BasicATK = 100.0f;
-        this.MAXATK = 150.0f;
-        this.ATK = BasicATK;
+        if (MaxHp == 0) MaxHp = 100000.0f;
+        CurrentHp = MaxHp;
+        ATK = BasicATK;
+
+        MAXATK = 150.0f;
         ATKBuff = false;
         coolATK = 0.0f;
+    }
 
+    void Start()
+    {
         this.player = GameObject.Find("Player");
-        this.skillhelper = GameObject.Find("SkillHelper").GetComponent<SkillHelper>();
+        GameObject skillHelperObj = GameObject.Find("SkillHelper");
+        if (skillHelperObj != null)
+            this.skillhelper = skillHelperObj.GetComponent<SkillHelper>();
+
         bossrenderer = GetComponent<SpriteRenderer>();
         bossanimator = GetComponent<Animator>();
+
+        if (bossHPBar == null)
+            bossHPBar = GetComponentInChildren<BossHPBar>();
+
+        if (bossHPBar != null)
+            bossHPBar.UpdateHP(CurrentHp, MaxHp);
 
         IsIdle = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector2 pb = this.transform.position; //보스의 위치
-        Vector2 pp = this.player.transform.position; //플레이어의 위치
-        Vector2 tracedir = pp - pb; //보스에서 플레이어를 향하는 벡터
-        float d = tracedir.magnitude; //보스에서 플레이어까지의 거리
+        if (player == null) return;
 
-        //벡터 방향에 따라 보스 스프라이트 뒤집기
-        if (tracedir.x < 0)
-        {
-            bossrenderer.flipX = true;
-        }
-        else
-        {
-            bossrenderer.flipX = false;
-        }
+        Vector2 pb = this.transform.position;
+        Vector2 pp = this.player.transform.position;
+        Vector2 tracedir = pp - pb;
+        float d = tracedir.magnitude;
+        float yDiff = Mathf.Abs(tracedir.y);
 
-        //공격력 버프 여부에 따라 공격력 부여
-        if (ATKBuff == true)
-        {
-            this.ATK = MAXATK;
-        }
-        else
-        {
-            this.ATK = BasicATK;
-        }
+        if (tracedir.x < 0) bossrenderer.flipX = true;
+        else bossrenderer.flipX = false;
 
-        // 아무것도 하지 않으면(공격이 끝나면) 추격 판단 모드 돌입
+        if (isAtkBuffed)
+        {
+            atkBuffTimer -= Time.deltaTime;
+            if (atkBuffTimer <= 0)
+            {
+                isAtkBuffed = false;
+                currentBuffMultiplier = 1.0f;
+            }
+        }
+        ATK = BasicATK * currentBuffMultiplier;
+
         if (IsIdle)
         {
-            if (d >= tracestart)
+            if (currentWaitTime > 0)
             {
-                Debug.Log("추격 시작");
+                currentWaitTime -= Time.deltaTime;
+                return;
+            }
+
+            if (d >= tracestart || yDiff > attackYRange)
+            {
                 IsIdle = false;
                 IsTracing = true;
                 this.bossanimator.SetTrigger("BossWalkTrig");
@@ -154,33 +168,27 @@ public class Bossactive : MonoBehaviour
                 AttackStart = true;
             }
         }
-        //특정 거리로 좁혀질 때까지 추격
         else if (IsTracing)
         {
-            if (d >= traceend)
+            if (d >= traceend || yDiff > attackYRange)
             {
-                Debug.Log("추격 중");
                 this.transform.Translate(tracedir * speed * Time.deltaTime);
             }
-            else if (d <= traceend)
+            else if (d <= traceend && yDiff <= attackYRange)
             {
-                Debug.Log("추격 중단");
                 IsTracing = false;
                 AttackStart = true;
                 this.bossanimator.SetTrigger("BossIdleTrig");
             }
         }
-        //공격 시작
         else if (AttackStart)
         {
-            Debug.Log("공격 시작");
-            AttackStart = false; //반복되지 않게끔 문 닫기
+            AttackStart = false;
             IsAttacking = true;
             skillhelper.BossSkillSelect();
         }
         else if (IsBlood)
         {
-            Debug.Log("핏빛 매화 사용 중");
             blood_cool -= Time.deltaTime;
             if (blood_cool <= 0)
             {
@@ -188,23 +196,20 @@ public class Bossactive : MonoBehaviour
                 {
                     GameObject b0 = Instantiate(Blood0);
                     b0.transform.position = this.transform.position;
-                    blood_cool = blood_coolm;
-                    blood_level = 1;
+                    blood_cool = blood_coolm; blood_level = 1;
                 }
                 else if (blood_level == 1)
                 {
                     GameObject b1 = Instantiate(Blood1);
                     float Xpos = (float)this.transform.position.x - 0.7f;
                     b1.transform.position = new Vector3(Xpos, this.transform.position.y, 0);
-                    blood_cool = blood_coolm;
-                    blood_level = 2;
+                    blood_cool = blood_coolm; blood_level = 2;
                 }
                 else if (blood_level == 2)
                 {
                     GameObject b2 = Instantiate(Blood2);
                     b2.transform.position = this.transform.position;
-                    blood_cool = blood_coolm;
-                    blood_level = 3;
+                    blood_cool = blood_coolm; blood_level = 3;
                 }
                 else if (blood_level == 3)
                 {
@@ -212,24 +217,88 @@ public class Bossactive : MonoBehaviour
                     float Xpos = (float)this.transform.position.x + 0.3f;
                     float Ypos = (float)this.transform.position.y + 0.3f;
                     b3.transform.position = new Vector3(Xpos, Ypos, 0);
-                    blood_cool = blood_coolm;
-                    blood_level = 4;
+                    blood_cool = blood_coolm; blood_level = 4;
                 }
                 else if (blood_level == 4)
                 {
                     GameObject b4 = Instantiate(Blood4);
                     b4.transform.position = this.transform.position;
-                    blood_cool = 0.2f;
-                    blood_level = 5;
+                    blood_cool = 0.2f; blood_level = 5;
                 }
                 else if (blood_level == 5)
                 {
-                    Debug.Log("스킬 끝");
-                    IsBlood = false;
-                    IsAttacking = false;
-                    IsIdle = true;
+                    IsBlood = false; IsAttacking = false; IsIdle = true;
                 }
             }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (Time.time >= lastTouchTime + touchInterval)
+            {
+                Playeractive playerScript = other.GetComponent<Playeractive>();
+                if (playerScript != null)
+                {
+                    playerScript.TakeDamage(touchDamage);
+                    lastTouchTime = Time.time;
+                }
+            }
+        }
+    }
+
+    public void TakeDamage(float rawDamage)
+    {
+        float damageReduction = (rawDamage * Defense) / (100f + Defense);
+        float finalDamage = rawDamage - damageReduction;
+        if (finalDamage < 1f) finalDamage = 1f;
+        finalDamage = Mathf.Floor(finalDamage);
+
+        CurrentHp -= finalDamage;
+
+        if (bossHPBar != null)
+        {
+            bossHPBar.UpdateHP(CurrentHp, MaxHp);
+        }
+
+        if (damageTextPrefab != null)
+        {
+            GameObject hud = Instantiate(damageTextPrefab, transform.position, Quaternion.identity);
+            hud.transform.position += new Vector3(0, 1.0f, 0.0f);
+
+            FloatingText ft = hud.GetComponent<FloatingText>();
+            ft.SetDamage(finalDamage);
+
+            if (ft.GetComponent<TextMeshPro>() != null)
+            {
+                ft.GetComponent<TextMeshPro>().color = Color.red;
+                ft.GetComponent<TextMeshPro>().fontSize = 5;
+            }
+        }
+
+        if (CurrentHp <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void ApplyAtkBuff(float multiplier, float duration)
+    {
+        isAtkBuffed = true;
+        currentBuffMultiplier = multiplier;
+        atkBuffTimer = duration;
+    }
+
+    public void Heal(float amount)
+    {
+        CurrentHp += amount;
+        if (CurrentHp > MaxHp) CurrentHp = MaxHp;
+
+        if (bossHPBar != null)
+        {
+            bossHPBar.UpdateHP(CurrentHp, MaxHp);
         }
     }
 }

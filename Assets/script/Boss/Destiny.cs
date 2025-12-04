@@ -1,29 +1,28 @@
 using UnityEngine;
 
-public class Destiny : MonoBehaviour
+public class Destiny : BossAttackBase
 {
-    Bossactive bossactive;
-    GameObject player;
-    public float time;
+    public float time = 2.0f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Start()
     {
-        this.bossactive = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
-        this.player = GameObject.Find("player");
-        time = 2.0f;
-        bossactive.ATKBuff = true;
-        bossactive.coolATK = 10.0f;
+        base.Start();
+
+        // 생성 즉시 버프 적용 (공격력 50% 증가, 10초)
+        if (bossactive != null)
+        {
+            Debug.Log("운명 발동! (공격력 50% 증가)");
+            bossactive.ApplyAtkBuff(1.5f, 10.0f);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         time -= Time.deltaTime;
         if (time <= 0)
         {
             Destroy(gameObject);
-            bossactive.BossSkillend();
+            if (bossactive != null) bossactive.BossSkillend();
         }
     }
 }
