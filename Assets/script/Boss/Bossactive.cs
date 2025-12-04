@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Bossactive : MonoBehaviour
 {
@@ -95,7 +96,7 @@ public class Bossactive : MonoBehaviour
 
     void Awake()
     {
-        if (MaxHp == 0) MaxHp = 100000.0f;
+        if (MaxHp == 0) MaxHp = 10000.0f;
         CurrentHp = MaxHp;
         ATK = BasicATK;
 
@@ -281,6 +282,7 @@ public class Bossactive : MonoBehaviour
         if (CurrentHp <= 0)
         {
             Destroy(gameObject);
+            SceneManager.LoadScene("Boss_Ending");
         }
     }
 
