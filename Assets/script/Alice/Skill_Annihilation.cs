@@ -12,8 +12,6 @@ public class Skill_Annihilation : PlayerSkillBase
 
     protected override void ActivateSkill()
     {
-        Debug.Log("[Skill 1] 섬멸 발동!");
-
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         Vector2 dir = (mousePos - player.transform.position).normalized;
@@ -24,7 +22,6 @@ public class Skill_Annihilation : PlayerSkillBase
             Animator playerAnim = player.GetComponent<Animator>();
             if (playerAnim != null) playerAnim.SetTrigger("Attack");
 
-            // [추가] 0.5초 동안 평타 금지
             player.SetGlobalDelay(0.5f);
         }
 

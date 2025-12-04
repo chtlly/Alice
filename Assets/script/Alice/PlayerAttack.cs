@@ -6,7 +6,6 @@ public class PlayerAttack : PlayerAttackBase
 
     void Start()
     {
-        // Playeractive에서 InitAttack을 호출해줄 때까지 대기
     }
 
     public void InitAttack(float damage, float duration)

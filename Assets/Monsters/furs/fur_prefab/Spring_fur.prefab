@@ -133,7 +133,7 @@ MonoBehaviour:
   maxHealth: 260
   attackDamage: 37
   defense: 22
-  expReward: 300
+  expReward: 1
   goldReward: 6
   goldItemPrefab: {fileID: 1512596240859620034, guid: 9c9dc3b0438eea94980e20b8b30a3d7c, type: 3}
   expItemPrefab: {fileID: 2001248440950481179, guid: 57de9907c2d6c8a43a65f4a444d577e9, type: 3}

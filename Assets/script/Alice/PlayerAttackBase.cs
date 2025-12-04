@@ -21,25 +21,22 @@ public class PlayerAttackBase : MonoBehaviour
     {
         if (isSetup == false) return;
 
-        // 1. 보스 때리기
         Bossactive boss = other.GetComponent<Bossactive>();
         if (boss != null)
         {
             boss.TakeDamage(damage);
             OnHitBoss(boss);
-            if (destroyOnHit) Destroy(gameObject);
-            return; // 보스 맞췄으면 끝
+
+            if (destroyOnHit) Destroy(gameObject, 0.1f);
+            return;
         }
 
-        // 2. [추가] 몬스터 때리기
         MonsterStats monster = other.GetComponent<MonsterStats>();
         if (monster != null)
         {
-            // 몬스터는 int형 체력을 쓰므로 형변환
             monster.TakeDamage((int)damage);
 
-            // 몬스터도 맞으면 투사체가 사라지게 할지 결정
-            if (destroyOnHit) Destroy(gameObject);
+            if (destroyOnHit) Destroy(gameObject, 0.1f);
         }
     }
 

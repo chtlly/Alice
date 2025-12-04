@@ -5,11 +5,15 @@ public class Skill_DimensionJump : PlayerSkillBase
     [Header("차원 도약 설정")]
     public float dashDistance = 5.0f;
 
-    [Header("스택 시스템")]
+    [Header("스택(충전) 시스템")]
     public int maxStacks = 2;
     public int currentStacks = 2;
     public float rechargeTime = 9.0f;
+
     private float rechargeTimer = 0.0f;
+
+    private float internalCooldown = 0.5f;
+    private float internalTimer = 0.0f;
 
     protected override void Start()
     {
@@ -19,24 +23,26 @@ public class Skill_DimensionJump : PlayerSkillBase
 
     protected override void Update()
     {
+        if (internalTimer > 0) internalTimer -= Time.deltaTime;
+
         if (currentStacks < maxStacks)
         {
             rechargeTimer += Time.deltaTime;
+
             if (rechargeTimer >= rechargeTime)
             {
                 currentStacks++;
                 rechargeTimer = 0.0f;
-                Debug.Log($"[Skill 2] 스택 충전! {currentStacks}/{maxStacks}");
             }
         }
     }
 
-    // 부모의 TryUseSkill을 무시하고 내 방식(스택)으로 씀
     public override void TryUseSkill()
     {
+        if (internalTimer > 0) return;
+
         if (currentStacks <= 0)
         {
-            Debug.Log($"[Skill 2] 스택 부족... ({rechargeTimer:F1}초 남음)");
             return;
         }
 
@@ -48,7 +54,7 @@ public class Skill_DimensionJump : PlayerSkillBase
 
     protected override void ActivateSkill()
     {
-        Debug.Log("[Skill 2] 차원 도약!");
+        internalTimer = internalCooldown;
         currentStacks--;
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -70,5 +76,16 @@ public class Skill_DimensionJump : PlayerSkillBase
     {
         currentStacks += amount;
         if (currentStacks > maxStacks) currentStacks = maxStacks;
+    }
+
+    public override float GetCurrentCooldown()
+    {
+        if (currentStacks >= maxStacks) return 0;
+        return 1.0f - (rechargeTimer / rechargeTime);
+    }
+
+    public override int GetStackCount()
+    {
+        return currentStacks;
     }
 }

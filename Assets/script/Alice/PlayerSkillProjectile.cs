@@ -7,7 +7,7 @@ public class PlayerSkillProjectile : PlayerAttackBase
 
     public void SetupProjectile(Vector2 dir, float speed, float dmg, float maxDistance, bool isPenetrate = false)
     {
-        this.destroyOnHit = !isPenetrate; // 관통 설정
+        this.destroyOnHit = !isPenetrate;
         base.Setup(dmg);
 
         moveDir = dir;

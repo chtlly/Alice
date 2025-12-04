@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerSkillBase : MonoBehaviour
 {
-    [Header("스킬 공통 설정")]
+    [Header("Skill Settings")]
     public float cooldownTime = 5.0f;
     public float manaCost = 10.0f;
     public GameObject skillPrefab;
@@ -27,11 +27,7 @@ public class PlayerSkillBase : MonoBehaviour
 
     public virtual void TryUseSkill()
     {
-        if (currentCooldown > 0)
-        {
-            Debug.Log($"[Skill] 쿨타임... ({currentCooldown:F1}초)");
-            return;
-        }
+        if (currentCooldown > 0) return;
 
         if (player != null && player.UseMana(manaCost))
         {
@@ -44,10 +40,19 @@ public class PlayerSkillBase : MonoBehaviour
     {
     }
 
-    // [추가됨] 쿨타임을 강제로 0으로 만드는 함수 (리미트 브레이크용)
     public virtual void ResetCooldown()
     {
         currentCooldown = 0.0f;
-        Debug.Log($"[{gameObject.name}] 쿨타임 초기화 완료!");
+    }
+
+    public virtual float GetCurrentCooldown()
+    {
+        if (cooldownTime <= 0) return 0;
+        return currentCooldown / cooldownTime;
+    }
+
+    public virtual int GetStackCount()
+    {
+        return -1;
     }
 }

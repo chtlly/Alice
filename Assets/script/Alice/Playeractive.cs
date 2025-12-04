@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic; // 리스트 사용을 위해 추가
+using System.Collections.Generic;
 
 public class Playeractive : MonoBehaviour
 {
@@ -13,9 +13,8 @@ public class Playeractive : MonoBehaviour
     public float Attack = 10;
     public float Defense = 10;
 
-    // [공격 설정]
     public float AttackSpeed = 1.5f;
-    public float maxAttackSpeed = 3.0f; // [추가] 공속 최대치 제한
+    public float maxAttackSpeed = 3.0f;
     public float attackDelay = 0.4f;
     public float baseEffectLifeTime = 0.5f;
 
@@ -23,12 +22,12 @@ public class Playeractive : MonoBehaviour
     public float MaxMana = 100;
     public float CurrentMana;
     public float manaRegenRate = 1.0f;
-    public float maxManaRegen = 10.0f; // [추가] 마나 재생 최대치 제한
+    public float maxManaRegen = 5.0f;
 
     [Header("Level Settings")]
     public int Level = 1;
     public float Exp = 0;
-    public float MaxExp = 100;
+    public float MaxExp = 5;
     public int Money = 0;
 
     public GameObject attackEffectPrefab;
@@ -49,7 +48,11 @@ public class Playeractive : MonoBehaviour
 
     void Awake()
     {
-        if (instance != null) { Destroy(gameObject); return; }
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
         DontDestroyOnLoad(gameObject);
 
@@ -80,7 +83,10 @@ public class Playeractive : MonoBehaviour
         if (startPoint != null) transform.position = startPoint.transform.position;
     }
 
-    private void OnDestroy() { SceneManager.sceneLoaded -= OnSceneLoaded; }
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     void Update()
     {
@@ -152,7 +158,11 @@ public class Playeractive : MonoBehaviour
     {
         isDialogueLocked = isActive;
         if (spriter != null) spriter.enabled = !isActive;
-        if (isActive) { inputVec = Vector2.zero; if (rigid != null) rigid.linearVelocity = Vector2.zero; }
+        if (isActive)
+        {
+            inputVec = Vector2.zero;
+            if (rigid != null) rigid.linearVelocity = Vector2.zero;
+        }
     }
 
     public void SetGlobalDelay(float duration)
@@ -176,6 +186,7 @@ public class Playeractive : MonoBehaviour
         if (finalDamage < 1f) finalDamage = 1f;
         finalDamage = Mathf.Floor(finalDamage);
         CurrentHp -= finalDamage;
+
         if (UIManager.instance != null) UIManager.instance.UpdateHP(CurrentHp, MaxHp);
 
         if (CurrentHp <= 0)
@@ -230,7 +241,6 @@ public class Playeractive : MonoBehaviour
         Level++;
         MaxExp = MaxExp * 1.2f;
 
-        // 확정 스탯 증가
         MaxHp += 20;
         CurrentHp = MaxHp;
         MaxMana += 10;
@@ -242,26 +252,21 @@ public class Playeractive : MonoBehaviour
             UIManager.instance.UpdateMana(CurrentMana, MaxMana);
         }
 
-        // [핵심 수정] 스마트 랜덤 스탯 뽑기
-        // 1. 올릴 수 있는 스탯 후보를 리스트에 담음
         List<int> availableStats = new List<int>();
 
-        availableStats.Add(0); // 공격력 (무제한)
-        availableStats.Add(1); // 방어력 (무제한)
+        availableStats.Add(0);
+        availableStats.Add(1);
 
-        // 마나 재생이 최대치보다 작을 때만 후보에 추가
         if (manaRegenRate < maxManaRegen)
         {
             availableStats.Add(2);
         }
 
-        // 공속이 최대치보다 작을 때만 후보에 추가
         if (AttackSpeed < maxAttackSpeed)
         {
             availableStats.Add(3);
         }
 
-        // 2. 후보 중에서 하나 뽑기
         int randIndex = Random.Range(0, availableStats.Count);
         int selectedStat = availableStats[randIndex];
 
@@ -279,13 +284,11 @@ public class Playeractive : MonoBehaviour
                 break;
             case 2:
                 manaRegenRate += 0.5f;
-                // 최대치 넘지 않게 보정
                 if (manaRegenRate > maxManaRegen) manaRegenRate = maxManaRegen;
                 bonusStatText = "Mana Regen +0.5";
                 break;
             case 3:
                 AttackSpeed += 0.5f;
-                // 최대치 넘지 않게 보정
                 if (AttackSpeed > maxAttackSpeed) AttackSpeed = maxAttackSpeed;
                 bonusStatText = "ASP +0.5";
                 break;
@@ -325,7 +328,19 @@ public class Playeractive : MonoBehaviour
         }
     }
 
-    void FixedUpdate() { Vector2 nextVec = inputVec.normalized * speed * Time.fixedDeltaTime; rigid.MovePosition(rigid.position + nextVec); }
-    private void LateUpdate() { anim.SetFloat("Speed", inputVec.magnitude); }
-    public void LookAt(Vector3 targetPos) { spriter.flipX = targetPos.x < transform.position.x; }
+    void FixedUpdate()
+    {
+        Vector2 nextVec = inputVec.normalized * speed * Time.fixedDeltaTime;
+        rigid.MovePosition(rigid.position + nextVec);
+    }
+
+    private void LateUpdate()
+    {
+        anim.SetFloat("Speed", inputVec.magnitude);
+    }
+
+    public void LookAt(Vector3 targetPos)
+    {
+        spriter.flipX = targetPos.x < transform.position.x;
+    }
 }

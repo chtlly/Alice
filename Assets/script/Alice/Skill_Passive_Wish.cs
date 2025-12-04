@@ -30,8 +30,6 @@ public class Skill_Passive_Wish : PlayerSkillBase
 
     protected override void ActivateSkill()
     {
-        Debug.Log("[Passive] 내일의 소망 발동!");
-
         currentCooldown = cooldownTime;
 
         if (skillPrefab != null)
@@ -47,7 +45,6 @@ public class Skill_Passive_Wish : PlayerSkillBase
     {
         float originalSpeed = player.AttackSpeed;
         player.AttackSpeed *= atkSpeedBuffMultiplier;
-        Debug.Log($"공속 증가! ({player.AttackSpeed})");
 
         float totalHealAmount = baseHeal + (player.Attack * atkMultiplier);
         float healPerSecond = totalHealAmount / duration;
@@ -63,6 +60,5 @@ public class Skill_Passive_Wish : PlayerSkillBase
         }
 
         player.AttackSpeed = originalSpeed;
-        Debug.Log($"공속 복구 ({player.AttackSpeed})");
     }
 }

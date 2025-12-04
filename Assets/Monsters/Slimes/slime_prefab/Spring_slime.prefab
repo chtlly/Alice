@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlimeController
   moveSpeed: 3
+  stopDistance: 0.8
 --- !u!114 &-8693190896956737387
 MonoBehaviour:
   m_ObjectHideFlags: 0

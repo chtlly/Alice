@@ -20,7 +20,6 @@ public class Bossactive : MonoBehaviour
     public float ATK;
     public float Defense = 10.0f;
 
-    // 몸통 박치기 관련
     public float touchDamage = 50.0f;
     private float lastTouchTime = 0.0f;
     public float touchInterval = 0.5f;
@@ -35,7 +34,6 @@ public class Bossactive : MonoBehaviour
     public bool ATKBuff;
     public float coolATK;
 
-    // 공격 빈도 조절
     public float attackDelay = 1.5f;
     private float currentWaitTime = 0.0f;
 
@@ -57,13 +55,11 @@ public class Bossactive : MonoBehaviour
     public float blood_level;
 
     [Header("UI 연결")]
-    public GameObject damageTextPrefab; // 데미지 텍스트 (숫자)
-    public BossHPBar bossHPBar;         // [추가됨] 머리 위 체력바 스크립트
+    public GameObject damageTextPrefab;
+    public BossHPBar bossHPBar;
 
-    // --- 스킬 함수들 ---
     public void Basic_ATK()
     {
-        Debug.Log("기본 공격 중");
         GameObject be = Instantiate(Basic_Effect);
         if (this.bossrenderer.flipX == true)
             be.transform.position = new Vector3(this.transform.position.x - 1, this.transform.position.y, 0);
@@ -73,28 +69,24 @@ public class Bossactive : MonoBehaviour
 
     public void Destiny()
     {
-        Debug.Log("운명 생성 중");
         GameObject d = Instantiate(Destiny_Effect);
         d.transform.position = this.transform.position;
     }
 
     public void Break_Earth()
     {
-        Debug.Log("브레이크 어스 생성 중");
         GameObject b = Instantiate(Break_Effect);
         b.transform.position = this.transform.position;
     }
 
     public void Blood_Fountain()
     {
-        Debug.Log("블러드 파운틴 생성 중");
         GameObject c1 = Instantiate(Blood_Circle);
         c1.transform.position = this.transform.position;
     }
 
     public void BossSkillend()
     {
-        Debug.Log("스킬 끝");
         IsAttacking = false;
         IsIdle = true;
         currentWaitTime = attackDelay;
@@ -122,7 +114,6 @@ public class Bossactive : MonoBehaviour
         bossrenderer = GetComponent<SpriteRenderer>();
         bossanimator = GetComponent<Animator>();
 
-        // [추가] 시작할 때 HP바 찾고 초기화
         if (bossHPBar == null)
             bossHPBar = GetComponentInChildren<BossHPBar>();
 
@@ -152,7 +143,6 @@ public class Bossactive : MonoBehaviour
             {
                 isAtkBuffed = false;
                 currentBuffMultiplier = 1.0f;
-                Debug.Log("보스 공격력 버프 종료");
             }
         }
         ATK = BasicATK * currentBuffMultiplier;
@@ -237,7 +227,6 @@ public class Bossactive : MonoBehaviour
                 }
                 else if (blood_level == 5)
                 {
-                    Debug.Log("스킬 끝");
                     IsBlood = false; IsAttacking = false; IsIdle = true;
                 }
             }
@@ -254,7 +243,6 @@ public class Bossactive : MonoBehaviour
                 if (playerScript != null)
                 {
                     playerScript.TakeDamage(touchDamage);
-                    Debug.Log("보스 몸통 박치기!");
                     lastTouchTime = Time.time;
                 }
             }
@@ -270,13 +258,10 @@ public class Bossactive : MonoBehaviour
 
         CurrentHp -= finalDamage;
 
-        // [추가] 체력바 갱신
         if (bossHPBar != null)
         {
             bossHPBar.UpdateHP(CurrentHp, MaxHp);
         }
-
-        Debug.Log($"<color=yellow>[BOSS] 피격! 원본:{rawDamage} / 최종:{finalDamage} / 남은체력:{CurrentHp}</color>");
 
         if (damageTextPrefab != null)
         {
@@ -295,7 +280,6 @@ public class Bossactive : MonoBehaviour
 
         if (CurrentHp <= 0)
         {
-            Debug.Log("보스 사망");
             Destroy(gameObject);
         }
     }
@@ -305,7 +289,6 @@ public class Bossactive : MonoBehaviour
         isAtkBuffed = true;
         currentBuffMultiplier = multiplier;
         atkBuffTimer = duration;
-        Debug.Log($"보스 공격력 버프: {multiplier}배 / {duration}초");
     }
 
     public void Heal(float amount)
@@ -313,12 +296,9 @@ public class Bossactive : MonoBehaviour
         CurrentHp += amount;
         if (CurrentHp > MaxHp) CurrentHp = MaxHp;
 
-        // [추가] 체력바 갱신
         if (bossHPBar != null)
         {
             bossHPBar.UpdateHP(CurrentHp, MaxHp);
         }
-
-        Debug.Log($"<color=green>[BOSS] 회복! 양: {amount} / 현재 체력: {CurrentHp}</color>");
     }
 }
