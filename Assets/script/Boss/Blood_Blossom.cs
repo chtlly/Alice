@@ -21,7 +21,7 @@ public class Blood_Blossom : BossAttackBase
 
             if (bossactive != null)
             {
-                bossactive.Heal(dealtDamage);
+                bossactive.Heal(dealtDamage*0.10f);
             }
         }
     }

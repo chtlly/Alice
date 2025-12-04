@@ -88,7 +88,7 @@ public class SkillHelper : MonoBehaviour
         {
             cool4 = cool4m;
             Debug.Log("ÇÍºû ¸ÅÈ­ ¹ßµ¿");
-            bossactive.blood_cool = 0.5f;
+            bossactive.blood_cool = 1.0f;
             bossactive.blood_level = 0;
             bossactive.IsBlood = true;
         }

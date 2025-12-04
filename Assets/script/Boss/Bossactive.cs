@@ -281,6 +281,8 @@ public class Bossactive : MonoBehaviour
 
         if (CurrentHp <= 0)
         {
+            IsBlood = false;
+            IsIdle = false;
             Destroy(gameObject);
             SceneManager.LoadScene("Boss_Ending");
         }
