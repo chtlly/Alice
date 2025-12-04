@@ -13,7 +13,7 @@ public class Blood_Blossom : BossAttackBase
     protected override void OnTriggerEnter2D(Collider2D other)
     {
         Playeractive player = other.GetComponent<Playeractive>();
-        if (player != null)
+        if (player != null && bossactive.CurrentHp > 0)
         {
             float rawDamage = player.MaxHp * 0.15f;
 
