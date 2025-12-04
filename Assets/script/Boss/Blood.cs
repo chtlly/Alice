@@ -1,33 +1,27 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Blood : MonoBehaviour
+public class Blood : BossAttackBase
 {
-    Bossactive boss;
-    GameObject player;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        this.boss = GameObject.Find("Rabbit_Ssi").GetComponent<Bossactive>();
-        this.player = GameObject.Find("player");
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (boss.IsAttacking == false)
+        if (bossactive != null && bossactive.IsAttacking == false)
         {
             Destroy(gameObject);
         }
-        
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        // 만약 들어온 오브젝트의 태그가 Player면
-        if (other.CompareTag("Player"))
+        Playeractive player = other.GetComponent<Playeractive>();
+        if (player != null)
         {
-            boss.hp -= 10;
+            float damageAmount = player.MaxHp * 0.15f;
+            player.TakeDamage(damageAmount);
+
+            if (bossactive != null)
+            {
+                bossactive.ApplyAtkBuff(1.5f, 10.0f);
+            }
         }
     }
 }

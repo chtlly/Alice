@@ -2,60 +2,75 @@
 
 public class GenericNPC : MonoBehaviour
 {
-    // Dialogue Content
+    // 대화 내용 설정
     [TextArea(3, 5)]
     public string[] dialogueLines;
 
-    // NPC 데이터
+    // NPC 일러스트
     [Header("NPC Data")]
-    public Sprite npcPortrait; // 이 NPC의 일러스트 스프라이트
+    public Sprite npcPortrait;
 
-    // Dialogue System References
+    // 대화 매니저 참조
     private GameIntroManager dialogueManager;
 
-    // Interaction & UI Settings
+    // UI 설정
     [Header("UI 및 상호작용 설정")]
-    public GameObject interactionPromptUI;
-    public GameObject speechBubbleObject;
+    public GameObject interactionPromptUI; // "F키를 누르세요" 같은 안내창
+    public GameObject speechBubbleObject;  // 말풍선
 
     private bool isPlayerNearby = false;
 
+    // 플레이어 제어를 위해 저장해둘 변수
+    private Playeractive cachedPlayer;
+    private bool isInteracting = false;
+
     void Start()
     {
-        // Manager 찾기 (최신 방식)
-        dialogueManager = FindAnyObjectByType<GameIntroManager>();
+        // 매니저 찾기 (최신 유니티 버전 호환)
+        dialogueManager = FindFirstObjectByType<GameIntroManager>();
+        // 만약 빨간줄 뜨면 FindAnyObjectByType<GameIntroManager>(); 로 변경
 
-        // UI 초기화
         if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
         if (speechBubbleObject != null) speechBubbleObject.SetActive(false);
     }
 
     void Update()
     {
+        // 대화 종료 감지: 내가 대화를 걸었는데(isInteracting), 매니저가 대화 끝났다고(isStoryActive == false) 하면
+        if (isInteracting && dialogueManager != null && !dialogueManager.isStoryActive)
+        {
+            EndDialogueSequence();
+        }
+
+        // 대화 시작 입력
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.Space))
         {
             if (dialogueManager.isStoryActive)
             {
-                // 대화 중일 경우: Manager에게 다음 줄로 넘기라고 지시
-                dialogueManager.NextLine();
+                dialogueManager.NextLine(); // 다음 대사로 넘기기
             }
             else
             {
-                // 대화 중이 아닐 경우: 대화가 아직 끝나지 않았을 때만 시작
                 if (dialogueLines.Length > 0)
                 {
-                    StartDialogueSequence();
+                    StartDialogueSequence(); // 대화 시작
                 }
             }
         }
     }
 
-    // 대화 시작 로직 (데이터 전달 및 제어권 인계)
     void StartDialogueSequence()
     {
         if (dialogueManager == null || dialogueLines.Length == 0) return;
 
-        // 1. Manager에게 데이터와 제어권 전달
+        // [핵심] 플레이어 얼리기 & 숨기기
+        if (cachedPlayer != null)
+        {
+            cachedPlayer.SetDialogueState(true);
+        }
+        isInteracting = true;
+
+        // 매니저에게 이미지랑 대사 전달
         if (dialogueManager.portraitDisplayImage != null && npcPortrait != null)
         {
             dialogueManager.portraitDisplayImage.sprite = npcPortrait;
@@ -67,19 +82,30 @@ public class GenericNPC : MonoBehaviour
             dialogueManager.activeSpeechBubble = speechBubbleObject;
         }
 
-        // 2. 대화 사이클 시작: 모든 라인을 Manager에게 넘깁니다.
         dialogueManager.ShowDialogue(dialogueLines);
 
-        // 대화 시작과 동시에 안내 UI 숨김
         if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
     }
 
-    // 플레이어 접근 감지 (OnTriggerEnter/Exit)
+    void EndDialogueSequence()
+    {
+        isInteracting = false;
+
+        // [핵심] 플레이어 다시 움직이게 & 보이게 하기
+        if (cachedPlayer != null)
+        {
+            cachedPlayer.SetDialogueState(false);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             isPlayerNearby = true;
+            // 들어온 플레이어 스크립트 저장
+            cachedPlayer = collision.GetComponent<Playeractive>();
+
             if (interactionPromptUI != null) interactionPromptUI.SetActive(true);
         }
     }
@@ -89,9 +115,9 @@ public class GenericNPC : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerNearby = false;
-            if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
+            cachedPlayer = null; // 나가면 참조 해제
 
-            // 플레이어가 멀어지면 대화가 끝나지 않았더라도 말풍선을 끕니다.
+            if (interactionPromptUI != null) interactionPromptUI.SetActive(false);
             if (speechBubbleObject != null) speechBubbleObject.SetActive(false);
         }
     }
