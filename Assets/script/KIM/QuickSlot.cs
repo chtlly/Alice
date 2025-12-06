@@ -40,7 +40,7 @@ public class QuickSlot : MonoBehaviour
     public bool AddItem(Item newItem)
     {
         if (currentItem == null)
-        {
+        { 
             currentItem = newItem;
             currentCount = 0;
             icon.sprite = newItem.itemImage;
@@ -87,7 +87,8 @@ public class QuickSlot : MonoBehaviour
 
             if (currentCount <= 0)
             {
-                ClearSlot();
+                //ClearSlot();
+                UpdateCountUI();
             }
             else
             {

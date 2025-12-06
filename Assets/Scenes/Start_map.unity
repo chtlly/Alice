@@ -2603,7 +2603,7 @@ MonoBehaviour:
   Level: 1
   Exp: 0
   MaxExp: 5
-  Money: 0
+  Money: 500
   attackEffectPrefab: {fileID: 3800196000749638711, guid: 1ad60dd6d4e909c4ba7fb848e3f0f941, type: 3}
   attackSpawnPoint: {fileID: 3955501}
   attackSpawnDistance: 2.7
