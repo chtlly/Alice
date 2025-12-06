@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8440089280818111315}
   - component: {fileID: 7375703048201139901}
   - component: {fileID: 6977614862725264525}
-  - component: {fileID: 1210604428696292458}
+  - component: {fileID: -4720429180246956594}
   - component: {fileID: -8693190896956737387}
   - component: {fileID: 5942445182442943897}
   m_Layer: 0
@@ -144,7 +144,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1210604428696292458
+--- !u!114 &-4720429180246956594
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,11 +153,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2632590165760143516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 043688f9cc6053b45a5713a5c8c585ad, type: 3}
+  m_Script: {fileID: 11500000, guid: d9a288b1bc1adfd46839d60a2cbcdf93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlimeController
   moveSpeed: 3
-  stopDistance: 0.8
 --- !u!114 &-8693190896956737387
 MonoBehaviour:
   m_ObjectHideFlags: 0
