@@ -61,6 +61,11 @@ public class MonsterStats : MonoBehaviour
             mySpawner.DecreaseCount();
         }
 
+        if (MonsterKillCount.instance != null)
+        {
+            MonsterKillCount.instance.AddKillCount();
+        }
+
         Destroy(gameObject);
     }
 

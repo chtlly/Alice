@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/End_Scene.unity.meta
 guid: 0788ef96b29134540abdc9b834f41aea
+========
+guid: 75d360f0803d6d0489d7cbc1fcd29f38
+folderAsset: yes
+>>>>>>>> 임시:Assets/Effect.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
