@@ -6,6 +6,7 @@ public class ScenePortal : MonoBehaviour
     [Header("다음 씬 설정")]
     // ⭐ 이동할 씬의 빌드 인덱스 번호를 Inspector에 입력하세요. ⭐
     public int nextSceneIndex;
+    public string sceneName; // 상점에서 쓸려고 만듬
 
     [Header("클리어 조건")]
     public int targetKillCount = 50; // 목표 처치 수

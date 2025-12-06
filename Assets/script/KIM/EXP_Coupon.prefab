@@ -48,7 +48,7 @@ MonoBehaviour:
   itemName: "\uACBD\uD5D8\uCE58 \uCFE0\uD3F0"
   itemImage: {fileID: -2862976270677842046, guid: e6364c507182b2a4e84e45a4918df758, type: 3}
   count: 0
-  price: 150
+  price: 100
   maxCount: 10
   itemType: 1
   purchaseText: 
