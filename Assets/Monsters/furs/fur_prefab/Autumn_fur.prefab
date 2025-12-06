@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8945805357223246456, guid: 8c11f6bf163a8bc4a903bc5441c62cb8, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -3899755525829043721, guid: 8c11f6bf163a8bc4a903bc5441c62cb8, type: 3}
       propertyPath: defense
       value: 37
@@ -28,6 +32,18 @@ PrefabInstance:
       propertyPath: attackDamage
       value: 52
       objectReference: {fileID: 0}
+    - target: {fileID: -3899755525829043721, guid: 8c11f6bf163a8bc4a903bc5441c62cb8, type: 3}
+      propertyPath: expItemPrefab
+      value: 
+      objectReference: {fileID: 2001248440950481179, guid: 57de9907c2d6c8a43a65f4a444d577e9, type: 3}
+    - target: {fileID: -3899755525829043721, guid: 8c11f6bf163a8bc4a903bc5441c62cb8, type: 3}
+      propertyPath: goldItemPrefab
+      value: 
+      objectReference: {fileID: 1512596240859620034, guid: 9c9dc3b0438eea94980e20b8b30a3d7c, type: 3}
+    - target: {fileID: -3899755525829043721, guid: 8c11f6bf163a8bc4a903bc5441c62cb8, type: 3}
+      propertyPath: damageTextPrefab
+      value: 
+      objectReference: {fileID: 301663749066941854, guid: 039ff51f6d2c73544b48e139ed4a7604, type: 3}
     - target: {fileID: 1639742808486975142, guid: 8c11f6bf163a8bc4a903bc5441c62cb8, type: 3}
       propertyPath: m_Name
       value: Autumn_fur

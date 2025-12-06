@@ -11,9 +11,9 @@ TagManager:
   - 
   - Water
   - UI
+  - Boss
+  - Player
   - characters
-  - 
-  - 
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Bubble
+    uniqueID: 3691746509
     locked: 0
   m_RenderingLayers:
   - Default

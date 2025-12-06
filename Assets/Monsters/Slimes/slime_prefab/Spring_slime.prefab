@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6977614862725264525}
   - component: {fileID: 1210604428696292458}
   - component: {fileID: -8693190896956737387}
+  - component: {fileID: 5942445182442943897}
   m_Layer: 0
   m_Name: Spring_slime
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.14, y: 5.26, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -156,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlimeController
   moveSpeed: 3
+  stopDistance: 0.8
 --- !u!114 &-8693190896956737387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,3 +175,43 @@ MonoBehaviour:
   defense: 20
   expReward: 1
   goldReward: 5
+  goldItemPrefab: {fileID: 1512596240859620034, guid: 9c9dc3b0438eea94980e20b8b30a3d7c, type: 3}
+  expItemPrefab: {fileID: 2001248440950481179, guid: 57de9907c2d6c8a43a65f4a444d577e9, type: 3}
+  damageTextPrefab: {fileID: 301663749066941854, guid: 039ff51f6d2c73544b48e139ed4a7604, type: 3}
+--- !u!70 &5942445182442943897
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2632590165760143516}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: -1}
+  m_Size: {x: 5, y: 3}
+  m_Direction: 0
