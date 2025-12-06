@@ -58,7 +58,7 @@ public class SlimeController : MonoBehaviour
         rb.linearVelocity = direction * moveSpeed;
     }
 
-    // [!][추가] 이동 방향에 따라 스프라이트를 좌우 반전시키는 함수
+    //  이동 방향에 따라 스프라이트를 좌우 반전시키는 함수
     void FlipSprite(float directionX)
     {
         // SpriteRenderer가 있는지 확인 (에러 방지)
