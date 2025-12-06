@@ -2281,7 +2281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266336ec6a446464e8eaa842b3941b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Winter_Battle
+  nextSceneIndex: 9
+  targetKillCount: 0
   playerTag: Player
 --- !u!1 &687783538
 GameObject:
@@ -5487,7 +5488,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266336ec6a446464e8eaa842b3941b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenePortal
-  sceneName: Shop
+  nextSceneIndex: 0
+  targetKillCount: 50
   playerTag: Player
 --- !u!1 &1366394675
 GameObject:

@@ -937,7 +937,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266336ec6a446464e8eaa842b3941b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Autumn_Battle
+  nextSceneIndex: 2
+  targetKillCount: 0
   playerTag: Player
 --- !u!1 &687783538
 GameObject:
@@ -1252,6 +1253,51 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &906272898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 906272900}
+  - component: {fileID: 906272899}
+  m_Layer: 0
+  m_Name: MonsterKillCount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &906272899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906272898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 416d2e77e8c73e644b2bd29b34af449f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterKillCount
+  currentKillCount: 0
+--- !u!4 &906272900
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906272898}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.03493, y: 1.58358, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1047741147
 GameObject:
   m_ObjectHideFlags: 0
@@ -4139,7 +4185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266336ec6a446464e8eaa842b3941b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenePortal
-  sceneName: Shop
+  nextSceneIndex: 0
+  targetKillCount: 50
   playerTag: Player
 --- !u!1 &1366394675
 GameObject:
@@ -6878,3 +6925,4 @@ SceneRoots:
   - {fileID: 1047741149}
   - {fileID: 2134105757}
   - {fileID: 1102428910}
+  - {fileID: 906272900}

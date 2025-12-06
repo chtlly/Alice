@@ -164,6 +164,51 @@ Transform:
   - {fileID: 1841943204}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &467390553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 467390555}
+  - component: {fileID: 467390554}
+  m_Layer: 0
+  m_Name: MonsterKillCount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &467390554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467390553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 416d2e77e8c73e644b2bd29b34af449f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterKillCount
+  currentKillCount: 0
+--- !u!4 &467390555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467390553}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.03493, y: 1.58358, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &517265837
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266336ec6a446464e8eaa842b3941b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Summer
+  nextSceneIndex: 6
+  targetKillCount: 50
   playerTag: Player
 --- !u!61 &1457335362
 BoxCollider2D:
@@ -7089,3 +7135,4 @@ SceneRoots:
   - {fileID: 517265838}
   - {fileID: 1913626120}
   - {fileID: 2051763855}
+  - {fileID: 467390555}
