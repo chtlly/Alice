@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/_Recovery/0 (4).unity.meta
 guid: cf81d1d08ebe73648bf90b4565a9977f
+========
+guid: 3477d4192bbb3a843b3326fcd942880f
+folderAsset: yes
+>>>>>>>> 임시:Assets/Monsters.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Effect.meta
 guid: 75d360f0803d6d0489d7cbc1fcd29f38
+========
+guid: 1ecd576e25b158d498e614a5215e7ec5
+>>>>>>>> 임시:Assets/Monsters/Slimes.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

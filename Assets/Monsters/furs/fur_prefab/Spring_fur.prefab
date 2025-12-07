@@ -44,6 +44,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4885612517415702014}
     - target: {fileID: 334305683092842842, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}
+      propertyPath: attackCooldown
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 334305683092842842, guid: dc9c336d3e336fb449298e9d40b8d5e9, type: 3}
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 2116439277491523162, guid: ced240e0a454de94ba92bb0cec29941d, type: 3}
