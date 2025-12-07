@@ -70,13 +70,17 @@ public class SlimeController : MonoBehaviour
     {
         if (spriteRenderer == null) return;
 
-        if (directionX > 0 && spriteRenderer.flipX)
-        {
-            spriteRenderer.flipX = false;
-        }
-        else if (directionX < 0 && !spriteRenderer.flipX)
+        // 오른쪽으로 이동 중(>0)인데, 현재 반전이 안 되어 있다면(!flipX = 왼쪽 보는 중)
+        // -> 반전시켜서 오른쪽을 보게 함 (True)
+        if (directionX > 0 && !spriteRenderer.flipX)
         {
             spriteRenderer.flipX = true;
+        }
+        // 왼쪽으로 이동 중(<0)인데, 현재 반전이 되어 있다면(flipX = 오른쪽 보는 중)
+        // -> 반전을 꺼서 원래대로 왼쪽을 보게 함 (False)
+        else if (directionX < 0 && spriteRenderer.flipX)
+        {
+            spriteRenderer.flipX = false;
         }
     }
 }

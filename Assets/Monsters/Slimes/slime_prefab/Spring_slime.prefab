@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 043688f9cc6053b45a5713a5c8c585ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlimeController
-  moveSpeed: 3
+  moveSpeed: 1.5
   stopDistance: 0.8
 --- !u!114 &-8693190896956737387
 MonoBehaviour:

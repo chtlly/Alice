@@ -127,9 +127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb7cd6ae470ac54ca2e894f749ece3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::furcontroller
-  moveSpeed: 3
+  moveSpeed: 1
   attackRange: 5
-  attackCooldown: 2
+  attackCooldown: 1
   projectilePrefab: {fileID: 2116439277491523162, guid: ced240e0a454de94ba92bb0cec29941d, type: 3}
   firePoint: {fileID: 0}
 --- !u!50 &3098468768275852524

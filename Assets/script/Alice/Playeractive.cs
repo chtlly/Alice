@@ -204,7 +204,35 @@ public class Playeractive : MonoBehaviour
         }
         return finalDamage;
     }
+    public bool BuyItem(Item item)
+    {
+        if (Money < item.price)
+        {
+            Debug.Log("돈이 부족합니다");
+            return false;
+        }
+        else
+        {
+            if (QuickSlotController.instance.AddItem(item))
+            {
+                Money -= item.price;
+                Debug.Log($"구매 {item.itemName}. 남은 돈: {Money}");
+                return true;
+            }
+            else
+            {
+                Debug.Log("슬롯을 확인해 주세요");
+                return false;
+            }
+        }
+    }
 
+    public void Heal()
+    {
+        CurrentHp += MaxHp * 0.3f;
+        if (CurrentHp > MaxHp) CurrentHp = MaxHp;
+        if (UIManager.instance != null) UIManager.instance.UpdateHP(CurrentHp, MaxHp);
+    }
     public void Heal(float amount)
     {
         CurrentHp += amount;
@@ -241,7 +269,7 @@ public class Playeractive : MonoBehaviour
         Level++;
         MaxExp = MaxExp * 1.2f;
 
-        MaxHp += 20;
+        MaxHp += 100;
         CurrentHp = MaxHp;
         MaxMana += 10;
         CurrentMana = MaxMana;
