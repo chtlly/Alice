@@ -2,4 +2,4 @@
 ALICE_IN_THE_DUNGEON
 
 
-이용 에셋 탑다운 2D RPG 에셋 팩(일부 사용)
+이용 에셋 탑다운 2D RPG 에셋 팩 - 골드메탈 (일부 사용)
