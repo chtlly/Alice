@@ -1,2 +1,2 @@
-게임소프트퀘어개발1 GAME조
+게임소프트웨어개발1 GAME조
 ALICE_IN_THE_DUNGEON
